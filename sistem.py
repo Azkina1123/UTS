@@ -20,10 +20,17 @@ class Toko:
             if masker.nama == nama_masker:
                 masker.jumlah -= jumlah
     
-    def stok_tersedia(self, nama_masker):
+    def stok_masker(self, nama_masker):
         for masker in self.list_masker:
             if masker.nama == nama_masker:
-                print(f"{masker.nama} --- stok saat ini : {masker.jumlah}")
+                return masker.jumlah
+
+    def stok_toko(self):
+        if len(self.list_masker) != 0:
+            for masker in self.list_masker:
+                print(f"{masker.nama} saat ini = {masker.jumlah} buah")
+        else:
+            print("Toko belum memiliki barang yang bisa dijual.")
 
 
 class Masker:
@@ -62,19 +69,47 @@ class Pembeli:
 
     # 1 s/d 5
     def nilai_masker(self, toko, nama_masker, nilai):
-        for masker in toko.lis_masker:
+        for masker in toko.list_masker:
             if masker.nama == nama_masker:
                 masker.nilai += nilai
 
 # contoh ----------------------------------------------------
 
-# buat toko
-toko1 = Toko("Ayam", "Samarinda")
-toko1.tambah_barang_baru("Panci", 2000, 100)
-toko1.stok_barang("Panci")
-toko1.kirim_barang("Panci", 20)
-toko1.stok_barang("Panci")
+# buat toko ......................
+toko_ayam = Toko("Ayam", "Samarinda") # nama toko = Ayam, lokasi = Samarinda
 
+# cek persediaan awal toko
+print("Cek persediaan...")
+toko_ayam.stok_toko()
+
+print("\nTambah masker yang akan dijual...")
+toko_ayam.tambah_masker_baru("Masker Biru", 1000, 100)
+# nama masker = Masker Biru, harga = 1000, persediaan = 100
+
+toko_ayam.tambah_masker_baru("Masker Hijau", 2000, 50)
+# nama masker = Masker Hijau, harga = 2000, persediaan = 50
+
+# cek persediaan toko
+print("\nCek persediaan...")
+print("Stok Toko Ayam : ")
+toko_ayam.stok_toko()
+
+
+# buat akun pembeli ...................
 yapi = Pembeli("Yapi", 123)
+# nama pembeli = Yapi, password = 123
+
+print("\nYapi pesan masker...")
+# yapi beli Masker Biru 50 buah
+yapi.pesan_masker(toko_ayam, "Masker Biru", 50)
+# yapi beli Masker Biru dari Toko Ayam 30 buah
+yapi.pesan_masker(toko_ayam, "Masker Hijau", 30)
+
+# cek persediaan toko lagi
+print("\nCek persediaan...")
+print("Stok Toko Ayam : ")
+toko_ayam.stok_toko()
+
+
 
 
