@@ -44,7 +44,18 @@ class Pembeli:
         self.nama = nama
         self.password = password
     
-    def pesan_barang(self, toko, barang):
+    def pesan_barang(self, toko, barang, jumlah):
+        for x in toko.barang:
+            if x.nama == barang:
+                x.jumlah -= jumlah
+                x.terjual += jumlah
+
+    # 1 s/d 5
+    def nilai_barang(self, toko, barang, nilai):
+        for x in toko.barang:
+            if x.nama == barang:
+                x.nilai += nilai
+
         
 toko1 = Toko("Ayam", "Samarinda")
 toko1.tambah_barang_baru("Panci", 2000, 100)
