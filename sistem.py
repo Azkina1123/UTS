@@ -1,6 +1,5 @@
 
 class Toko:
-
     # default attribute/properties toko -----------------------------------
     def __init__(self, nama, lokasi):
         # identitas toko
@@ -9,17 +8,33 @@ class Toko:
 
         # persediaan toko
         self.list_masker = [] # tempat objek masker yg dijual
+
+        self.list_pesanan_masuk = []
+        self.pesanan_masuk = len(self.list_pesanan_masuk)
         self.pendapatan = 0
-        self.pesanan = 0
 
     # method = fungsi yg cuma bisa dipake objek Toko ----------------------
     def tambah_masker_baru(self, nama_masker, harga, jumlah):
         self.list_masker.append(Masker(nama_masker, harga, jumlah))
 
-    def kirim_masker(self, nama_masker, jumlah):
+    def tambah_pesanan_masuk(self, nama_masker, jumlah, alamat):
         for masker in self.list_masker:
             if masker.nama == nama_masker:
-                masker.jumlah -= jumlah
+                # persediaan masker dikurangi
+                masker.kurangi_stok(jumlah)
+
+                pesanan = [nama_masker, jumlah, alamat]
+                self.list_pesanan_masuk.append(pesanan)
+
+                self.pendapatan += jumlah * masker.harga
+
+    def kirim_masker(self):
+        pass
+    
+    def restock_masker(self, nama_masker, jumlah):
+        for masker in self.list_masker:
+            if masker.nama == nama_masker:
+                masker.tambah_stok(jumlah)
     
     def stok_masker(self, nama_masker):
         for masker in self.list_masker:
@@ -31,7 +46,7 @@ class Toko:
             for masker in self.list_masker:
                 print(f"{masker.nama} saat ini = {masker.jumlah} buah")
         else:
-            print("Toko belum memiliki barang yang bisa dijual.")
+            print("Toko belum memiliki barang yang dijual.")
 
 
 class Masker:
@@ -42,16 +57,11 @@ class Masker:
         self.harga = harga
         self.jumlah = jumlah
 
-        # rating pembelian barang
-        self.nilai = 0
-        self.terjual = 0
-        self.rate = self.nilai/self.terjual if self.terjual != 0 else 0
-
     # method = fungsi yg cuma bisa dipake objek Masker -----------------------
-    def tambah_persediaan(self, jumlah):
+    def tambah_stok(self, jumlah):
         self.jumlah += jumlah
 
-    def kurangi_persediaan(self, jumlah):
+    def kurangi_stok(self, jumlah):
         self.jumlah -= jumlah
 
 
@@ -62,21 +72,21 @@ class Pembeli:
         self.password = password
     
     # method = semua yg bisa dilakukan oleh si pembeli -----------------------
-    def pesan_masker(self, toko, nama_masker, jumlah):
+    def pesan_masker(self, toko, nama_masker, jumlah, alamat):
         for masker in toko.list_masker:
             if masker.nama == nama_masker:
-                masker.jumlah -= jumlah
-                masker.terjual += jumlah
+                toko.tambah_pesanan_masuk(nama_masker, jumlah, alamat)
 
-    # 1 s/d 5
-    def nilai_masker(self, toko, nama_masker, nilai):
-        for masker in toko.list_masker:
-            if masker.nama == nama_masker:
-                masker.nilai += nilai
 
-# contoh ----------------------------------------------------
+def search():
+    pass
 
-# buat toko ......................
+def sort():
+    pass
+
+# contoh -----------------------------------------------------------------------------
+
+# buat toko .........................................
 toko_ayam = Toko("Ayam", "Samarinda") # nama toko = Ayam, lokasi = Samarinda
 #????????????????????????????????????????????????????????????#
 
