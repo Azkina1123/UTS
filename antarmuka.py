@@ -122,10 +122,13 @@ def Menu_pembeli_2():
     #if Barang_dituju in ListBarang --> "\n\n\t\tbarang ditemukan!: ", tampilkan barang dan stok
     if masker_tersedia(Barang_dituju):
 
-        masker = masker_dipilih(Barang_dituju)
-        # tampilkan masker 
-        masker.tampilkan_data() # di class Pembeli
-
+        # tampilkan masker-masker yang namanya berkaitan dgn yg dicari
+        masker_ditemukan = masker_dipilih(Barang_dituju)
+        for masker in masker_ditemukan:
+            masker.tampilkan_data() # di class Pembeli
+            print()
+            
+        # user pilih masker mana yg mau dibeli
         #Apakah ingin menambahkan ke kereta belanja?
     
     # #if Barang_dituju not in ListBarang -->
@@ -139,5 +142,6 @@ def Menu_pembeli_3():
     #Sort barang berdasarkan? (Nama, Warna, Stok, Best seller(?), harga)
     print()
 
-Menu_User()
+# Menu_User()
+Menu_pembeli_2()
 

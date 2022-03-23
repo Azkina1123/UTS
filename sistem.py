@@ -1,7 +1,6 @@
-# TEMPATNYA FUNGSI-FUNGSI
+# TEMPATNYA FUNGSI-FUNGSI DAN PENYIMPANAN
 
 import os
-
 
 class Toko:
     # default attribute/properties toko -----------------------------------
@@ -95,24 +94,38 @@ class Pembeli:
 #                           DATA 
 # ==========================================================
 
-akun_toko = Toko(
-    nama="Toko Masker",
-    password="IS-IS",
-    lokasi="Samarinda"
-)
+akun_toko = [
+    Toko(
+        nama = "Toko Masker",
+        password = "IS-IS",
+        lokasi = "Samarinda"
+    )
+]
 
 daftar_masker = [
     Masker(
-        nama="Masker KF94 10 Pcs",
-        warna="Putih", 
-        harga=12000,
-        jumlah=100
+        nama = "Masker KF94 10 Pcs",
+        warna = "Putih", 
+        harga = 12000,
+        jumlah = 100
     ),
     Masker(
-        nama="Masker KF94 50 Pcs",
-        warna="Putih",
-        harga=45000,
-        jumlah=500
+        nama = "Masker KF94 50 Pcs",
+        warna = "Putih",
+        harga = 45000,
+        jumlah = 500
+    ),
+    Masker(
+        nama = "Masker KN95 10 Pcs",
+        warna = "Putih",
+        harga = 10000,
+        jumlah = 150
+    ),
+    Masker(
+        nama = "Masker KN95 50 Pcs",
+        warna = "Putih",
+        harga = 40000,
+        jumlah = 500
     )
 ]
 
@@ -134,6 +147,7 @@ akun_pembeli = [
 def clear():
     _ = os.system("cls")
 
+# return Boolean
 def nama_sudah_ada(tipe_akun, nama):
     for akun in tipe_akun:
         if akun.nama == nama:
@@ -141,6 +155,7 @@ def nama_sudah_ada(tipe_akun, nama):
     else:
         return False
 
+# return Boolean
 def password_benar(tipe_akun, nama, password):
     for akun in tipe_akun:
         if akun.nama == nama:
@@ -149,6 +164,7 @@ def password_benar(tipe_akun, nama, password):
     else:
         return False
 
+# return Boolean
 def masker_tersedia(nama):
     for masker in daftar_masker:
         if nama.casefold() in masker.nama.casefold():
@@ -156,15 +172,66 @@ def masker_tersedia(nama):
     else:
         return False
 
+# return Masker
 def masker_dipilih(nama):
+    # cari nama yg berkaitan dgn yg dicari
+    nama_ditemukan = []
     for masker in daftar_masker:
         if nama.casefold() in masker.nama.casefold():
-            return masker
+            nama_ditemukan.append(masker.nama)
 
-def search():
-    pass
+    # list nama semua masker yg tersedia
+    list_nama_masker = [masker.nama for masker in daftar_masker]
+    
+    # cari masker2 yg ditemukan
+    masker_ditemukan = []
+    for nama_masker in nama_ditemukan:
+        index = fibonacci_search(list_nama_masker, nama_masker)
+        masker_ditemukan.append(daftar_masker[index])
+
+    return masker_ditemukan
+
+# return int atau None
+def fibonacci_search(list_data, data):
+    size = len(list_data)
+     
+    start = -1
+     
+    f0 = 0
+    f1 = 1
+    f2 = 1
+    while(f2 < size):
+        f0 = f1
+        f1 = f2
+        f2 = f1 + f0
+     
+     
+    while(f2 > 1):
+        index = min(start + f0, size - 1)
+        if list_data[index] < data:
+            f2 = f1
+            f1 = f0
+            f0 = f2 - f1
+            start = index
+        elif list_data[index] > data:
+            f2 = f0
+            f1 = f1 - f0
+            f0 = f2 - f1
+        else:
+            return index
+    if (f1) and (list_data[size - 1] == data):
+        return size - 1
+    return None
 
 def sort():
     pass
+
+def is_integer(angka):
+    try:
+        int(angka)
+    except ValueError:
+        return False
+    else:
+        return True 
 
 
