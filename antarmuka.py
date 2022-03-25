@@ -100,7 +100,8 @@ def Menu_untuk_Pembeli(Notes="Selamat datang ((Pembeli))!!"):
     [2] Cari barang berdasarkan nama
     [3] Cek daftar barang secara keseluruhan
     [4] Menuju struk belanja
-    [5] Keluar """)
+    [5] Ubah profil
+    [6] Keluar """)
     #note: 1 --> barang dipisah berdasarkan nama masker
     #      2 --> search nama barang
     #      3 --> tanya di-sort berdasarkan apa --> 
@@ -113,7 +114,7 @@ def Menu_untuk_Pembeli(Notes="Selamat datang ((Pembeli))!!"):
 def Menu_pembeli_1():
     #cls
     #pilih kategori(Nama, Warna)
-    print()
+    pass
 
 def Menu_pembeli_2():
     Barang_dituju = input("\n Masukkan nama barang: ")
@@ -139,9 +140,35 @@ def Menu_pembeli_2():
     
 
 def Menu_pembeli_3():
+    print( """Pilih metode pengurutan barang:
+    [1] Berdasarkan Nama
+    [2] Berdasarkan Warna
+    [3] Berdasarkan Ketersediaan / Stok
+    [4] Berdasarkan Harga Terendah
+    [5] Berdasarkan Harga Tertinggi""")
     #Sort barang berdasarkan? (Nama, Warna, Stok, Best seller(?), harga)
-    print()
+    #if-if-if-if
+    pass
+
+def Menu_pembeli_4():
+    #strukbelanja(For i in struk belanja, terurut berdasarkan waktu pemesanan)
+    pass
+
+def Menu_untuk_Penjual(Notes="Selamat datang kembali ((Penjual))!!"):
+    clear()
+
+    print(f""" {Notes}
+    [1] Tambahkan masker baru
+    [2] Hapus masker yang sudah ada""")
+    #note: 1 --> barang dipisah berdasarkan nama masker
+    #      2 --> search nama barang
+    #      3 --> tanya di-sort berdasarkan apa --> 
+    #      4 --> tertera
+    #      5 --> tertera
+    Respon_menu_user = int(input("\n\t\t>>"))
+    # Conditions Respon_menu_user
+    # invalid_input --> Menu_untuk_pembeli("Silahkan pilih menu yang tersedia, ((Pembeli))")
 
 # Menu_User()
-Menu_pembeli_2()
 
+Menu_User()

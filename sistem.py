@@ -131,12 +131,12 @@ daftar_masker = [
 
 akun_pembeli = [
     Pembeli(
-        nama="Yafi",
-        password="Yafi"
+        nama="Yapoy",
+        password="Yapoy"
     ),
     Pembeli(
-        nama="Iza",
-        password="Iza"
+        nama="Haji ijah",
+        password="Haji Ijah"
     )
 ]
 
@@ -234,4 +234,19 @@ def is_integer(angka):
     else:
         return True 
 
+# decorating material
 
+def Palette_Warna(ColourCode="White", text="", fonteu="Reset"):
+    ColourTupleA = ("Black","Red","Green","Orange","Blue","Purple","Cyan","White")
+    ColourTupleB = ("Grey","LRed","LGreen","Yellow","LBlue","Pink","LCyan")
+    FontTuple = ("Reset","Bold","Disable",0,"Underline",0,0,"Reverse","Invisible","Strikethrough")
+
+    if ColourCode in ColourTupleA:
+        ColourNumber = 30 + ColourTupleA.index(ColourCode)
+    elif ColourCode in ColourTupleB:
+        ColourNumber = 90 + ColourTupleB.index(ColourCode)
+    FontNumber = FontTuple.index(fonteu)
+    return f"\033[{FontNumber};{ColourNumber};40m{text}"
+
+def printc(ColourCode, text, fonteu):
+    print(Palette_Warna(ColourCode, text, fonteu))
