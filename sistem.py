@@ -54,6 +54,7 @@ class Toko:
 
 
 class Masker:
+    jumlah_seluruh_masker = 0
     # default attribute/properties tiap2 masker -----------------------------
     def __init__(self, nama, warna, harga, jumlah):
         # identitas barang
@@ -61,6 +62,8 @@ class Masker:
         self.warna = warna
         self.harga = harga
         self.jumlah = jumlah
+        Masker.jumlah_seluruh_masker += 1
+        self.kode = f"ms{Masker.jumlah_seluruh_masker}"
 
     # method = fungsi yg cuma bisa dipake objek Masker -----------------------
     def tambah_stok(self, jumlah):
@@ -71,9 +74,10 @@ class Masker:
 
     def tampilkan_data(self):
         print(
-            f"Nama\t: {self.nama}\
+            f"[{self.kode.center(30)}]\
+            \nNama\t: {self.nama}\
             \nWarna\t: {self.warna}\
-            \nHarga\t: {self.harga}\
+            \nHarga\t: Rp{self.harga}\
             \nStok\t: {self.jumlah}"
         )
 
@@ -85,10 +89,10 @@ class Pembeli:
         self.password = password
     
     # method = semua yg bisa dilakukan oleh si pembeli -----------------------
-    def pesan_masker(self, toko, nama_masker, jumlah, alamat):
+    def pesan_masker(self, toko, kode, jumlah, alamat):
         for masker in toko.list_masker:
-            if masker.nama == nama_masker:
-                toko.tambah_pesanan_masuk(nama_masker, jumlah, alamat)
+            if masker.kode == kode:
+                toko.tambah_pesanan_masuk(kode, jumlah, alamat)
 
 # ==========================================================
 #                           DATA 
@@ -96,8 +100,8 @@ class Pembeli:
 
 akun_toko = [
     Toko(
-        nama = "Toko Masker",
-        password = "IS-IS",
+        nama = "FORTRAN",
+        password = "YAPIZ",
         lokasi = "Samarinda"
     )
 ]
