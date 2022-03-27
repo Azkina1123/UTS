@@ -96,11 +96,6 @@ class Pembeli:
                 toko.tambah_pesanan_masuk(kode, jumlah, alamat)
                 self.list_pesanan.append(masker)
 
-                print(f"Anda memesan : \
-                    \n{masker.nama} warna {masker.warna.lower()}\
-                    \nsebanyak {jumlah}.\
-                    \nTotal harga Rp{jumlah*masker.harga}")
-
 # ==========================================================
 #                           DATA 
 # ==========================================================
