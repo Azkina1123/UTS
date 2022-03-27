@@ -204,27 +204,42 @@ def Menu_pembeli_2():
         print("\n(Masukkan kode masker)")
         kode_masker = input("Barang yang ingin dibeli : ")
 
-        if kode_masker in [masker.kode for masker in daftar_masker]:
-            print()
-            
-            # lanjutkan pembelian
-            form = ["Jumlah barang", "Alamat Anda"]
-            for i in range(len(form)):
-                answer = input(f"{form[i].ljust(10)} : ")
+        for masker in daftar_masker:
+            if masker.kode == kode_masker:
+                print()
 
-                if i == 0:
-                    answer = int(answer)
-                    form[i] = answer
-            
-            """ PROSES PEMBELIAN
-            akun_pembeli_now[0] = akun yg login
-            akun_toko[0]        = akun toko ini
-            form[0]             = jumlah barang
-            form[1]             = alamat barang
-            """
-            akun_pembeli_now[0].pesan_masker(akun_toko[0], kode_masker, form[0], form[1])
+                # lanjutkan pembelian
+                form = ["Jumlah barang", "Alamat Anda"]
+                for i in range(len(form)):
+                    answer = input(f"{form[i].ljust(10)} : ")
 
-        # barang yg dibeli gak ada
+                    if i == 0:
+                        answer = int(answer)
+                        form[i] = answer
+                
+                """ PROSES PEMBELIAN
+                akun_pembeli_now[0] = akun yg login
+                akun_toko[0]        = akun toko ini
+                form[0]             = jumlah barang
+                form[1]             = alamat barang
+                """
+
+                print(f"\nAnda memesan {masker.nama} warna {masker.warna}\
+                    \nseharga Rp{masker.harga} sebanyak {form[0]} buah ke alamat {form[1]}.\
+                    \nTotal yang harus dibayar adalah Rp{form[0]*masker.harga}")
+                respon = input("\nKetik '1' untuk melanjutkan pembelian\n>> ")
+    
+                if respon == "1":
+                    # pesanan diproses
+                    akun_pembeli_now[0].pesan_masker(akun_toko[0], kode_masker, form[0], form[1])
+
+                    Menu_pembeli_1()
+                    
+                else:
+                    # pesanan batal
+                    Menu_pembeli_2()
+
+            # barang yg dibeli gak ada
         else:
             # barang g ada
             Menu_pembeli_2()
