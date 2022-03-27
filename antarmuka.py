@@ -67,7 +67,7 @@ def Login_Pembeli(warning=""):
             #Verifikasi nama+pass / pembatalan pilihan --> 
             if nama_sudah_ada(akun_pembeli, nama) and password_benar(akun_pembeli, nama, password):
                 # berhasil masuk, sekarang di akun si yg namanya diinput tadi
-                akun_pembeli_now = [pembeli for pembeli in akun_pembeli if akun_pembeli.name == nama]
+                akun_pembeli_now = [pembeli for pembeli in akun_pembeli if pembeli.nama == nama]
 
                 Menu_untuk_Pembeli()
 
@@ -198,10 +198,13 @@ def Menu_pembeli_2():
             print()
             i += 1
 
-        print("\n[Masukkan nomor masker]")
+        # user pilih masker mana yg mau dibeli
+        print("\n(Masukkan kode masker)")
         kode_masker = input("Barang yang ingin dibeli : ")
 
         if kode_masker in [masker.kode for masker in daftar_masker]:
+            print()
+            
             # lanjutkan pembelian
             form = ["Jumlah barang", "Alamat Anda"]
             for i in range(len(form)):
@@ -210,17 +213,19 @@ def Menu_pembeli_2():
                 if i == 0:
                     answer = int(answer)
                     form[i] = answer
-
+            
+            """ PROSES PEMBELIAN
+            akun_pembeli_now[0] = akun yg login
+            akun_toko[0]        = akun toko ini
+            form[0]             = jumlah barang
+            form[1]             = alamat barang
+            """
             akun_pembeli_now[0].pesan_masker(akun_toko[0], kode_masker, form[0], form[1])
+
+        # barang yg dibeli gak ada
         else:
             # barang g ada
             Menu_pembeli_2()
-
-
-
-
-    # user pilih masker mana yg mau dibeli
-    #Apakah ingin menambahkan ke kereta belanja?
 
     # #if Barang_dituju not in ListBarang -->
     else:
@@ -263,4 +268,4 @@ def Menu_untuk_Penjual(Notes="Selamat datang kembali ((Penjual))!!"):
     # Conditions Respon_menu_user
     # invalid_input --> Menu_untuk_pembeli("Silahkan pilih menu yang tersedia, ((Pembeli))")
 
-Menu_pembeli_2()
+Login_Pembeli()

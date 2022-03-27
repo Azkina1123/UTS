@@ -13,8 +13,8 @@ class Toko:
         # persediaan toko
         self.list_masker = [] # tempat objek masker yg dijual
 
-        self.list_pesanan_masuk = []
-        self.pesanan_masuk = len(self.list_pesanan_masuk)
+        self.list_pesanan = []
+        self.pesanan_masuk = len(self.list_pesanan)
         self.pendapatan = 0
 
     # method = fungsi yg cuma bisa dipake objek Toko ----------------------
@@ -28,7 +28,7 @@ class Toko:
                 masker.kurangi_stok(jumlah)
 
                 pesanan = [nama_masker, jumlah, alamat]
-                self.list_pesanan_masuk.append(pesanan)
+                self.list_pesanan.append(pesanan)
 
                 self.pendapatan += jumlah * masker.harga
 
@@ -87,12 +87,19 @@ class Pembeli:
     def __init__(self, nama, password):
         self.nama = nama
         self.password = password
+        self.list_pesanan = []
     
     # method = semua yg bisa dilakukan oleh si pembeli -----------------------
     def pesan_masker(self, toko, kode, jumlah, alamat):
         for masker in toko.list_masker:
             if masker.kode == kode:
                 toko.tambah_pesanan_masuk(kode, jumlah, alamat)
+                self.list_pesanan.append(masker)
+
+                print(f"Anda memesan : \
+                    \n{masker.nama} warna {masker.warna.lower()}\
+                    \nsebanyak {jumlah}.\
+                    \nTotal harga Rp{jumlah*masker.harga}")
 
 # ==========================================================
 #                           DATA 
