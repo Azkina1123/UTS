@@ -135,8 +135,7 @@ daftar_masker = [
     )
 ]
 
-for i in range(1):
-    daftar_masker[i].tampilkan_data()
+
 
 
 akun_pembeli = [
@@ -244,6 +243,9 @@ def insertion_sort(list_data):
                 list_data[j+1] = list_data[j]
                 j -= 1
         list_data[j+1] = key
+
+
+
 
 def is_integer(angka):
     try:
