@@ -1,6 +1,7 @@
 # TEMPATNYA FUNGSI-FUNGSI DAN PENYIMPANAN
 
 import os
+import time
 
 class Toko:
     # default attribute/properties toko -----------------------------------
@@ -103,7 +104,7 @@ class Pembeli:
 akun_toko = [
     Toko(
         nama = "FORTRAN",
-        password = "YAPIZ",
+        password = "F0rtR355",
         lokasi = "Samarinda"
     )
 ]
@@ -135,7 +136,6 @@ daftar_masker = [
     )
 ]
 
-
 akun_pembeli = [
     Pembeli(
         nama="Yapoy",
@@ -153,6 +153,10 @@ akun_pembeli = [
 
 def clear():
     _ = os.system("cls")
+
+def tclear(sec):
+    time.sleep(sec)
+    clear()
 
 # return Boolean
 def nama_sudah_ada(tipe_akun, nama):
@@ -198,12 +202,6 @@ def masker_dipilih(nama):
 
     return masker_ditemukan
 
-def jumlah_masuk_akal(jumlah):
-    if jumlah > 0:
-        return True
-    else:
-        return False
-
 # return int atau None
 def fibonacci_search(list_data, data):
     size = len(list_data)
@@ -237,8 +235,9 @@ def fibonacci_search(list_data, data):
     return None
 
 def insertion_sort(list_data):
- 
-    for i in range(1, len(list_data)):
+
+    list_copy = list_data.copy()
+    for i in range(1, len(list_copy)):
  
         key = list_data[i]
 
@@ -247,68 +246,6 @@ def insertion_sort(list_data):
                 list_data[j+1] = list_data[j]
                 j -= 1
         list_data[j+1] = key
-
-def sort_berdasarkan(kategori):
-    if kategori == "harga":
-        list_harga = [masker.harga for masker in daftar_masker]
-        insertion_sort(list_harga)
-
-        list_masker = daftar_masker.copy()
-
-        for harga in list_harga:
-            index_harga = list_harga.index(harga)
-
-            for masker in list_masker:
-                if harga == masker.harga:
-                    list_harga[index_harga] = masker
-                    list_masker.remove(masker)
-        
-        return list_harga
-    elif kategori == "nama":
-        list_nama = [masker.nama for masker in daftar_masker]
-        insertion_sort(list_nama)
-
-        for nama in list_nama:
-            index_nama = list_nama.index(nama)
-
-            for masker in daftar_masker:
-                if nama == masker.nama:
-                    list_nama[index_nama] = masker
-        
-        return list_nama
-
-    elif kategori == "warna":
-        list_warna = [masker.warna for masker in daftar_masker]
-        insertion_sort(list_warna)
-
-        list_masker = daftar_masker.copy()
-
-        for warna in list_warna:
-            index_warna = list_warna.index(warna)
-
-            for masker in list_masker:
-                if warna == masker.warna:
-                    list_warna[index_warna] = masker
-                    list_masker.remove(masker)
-        
-        return list_warna
-    
-    elif kategori == "stok":
-        list_stok = [masker.stok for masker in daftar_masker]
-        insertion_sort(list_stok)
-
-        list_masker = daftar_masker.copy()
-
-        for stok in list_stok:
-            index_stok = list_stok.index(stok)
-
-            for masker in list_masker:
-                if stok == masker.stok:
-                    list_stok[index_stok] = masker
-                    list_masker.remove(masker)
-        
-        return list_stok
-
 
 def is_integer(angka):
     try:
@@ -329,7 +266,7 @@ def Palette_Warna(ColourCode="White", text="", fonteu="Reset"):
     elif ColourCode in ColourTupleB:
         ColourNumber = 90 + ColourTupleB.index(ColourCode)
     FontNumber = FontTuple.index(fonteu)
-    return f"\033[{FontNumber};{ColourNumber};40m{text}"
+    return f"\033[{FontNumber};{ColourNumber};40m{text}\033[0;37;40m"
 
 def printc(ColourCode, text, fonteu):
     print(Palette_Warna(ColourCode, text, fonteu))
