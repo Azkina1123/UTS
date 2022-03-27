@@ -135,6 +135,10 @@ daftar_masker = [
     )
 ]
 
+for i in range(1):
+    daftar_masker[i].tampilkan_data()
+
+
 akun_pembeli = [
     Pembeli(
         nama="Yapoy",
