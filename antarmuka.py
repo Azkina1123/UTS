@@ -5,12 +5,17 @@ def Menu_User():
     clear()
 
     print("""\n\n\n\n\n
-            !Selamat Datang!
+:                                          :
+:                                          :
+:__________________________________________:
+|             !Selamat Datang!             |
+|                                          |
+|      Masuk ke dalam program sebagai:     |
+|    [1] Pembeli            [2] Penjual    |
+ \________________________________________/""")
 
-      Masuk ke dalam program sebagai:
-    [1] Pembeli            [2] Penjual""")
 
-    Respon_Menu_User = input("\n\t\t >> ")
+    Respon_Menu_User = input("\n\t\t  >> ")
     if Respon_Menu_User == "1":
         #cls
         Login_Pembeli()
@@ -140,13 +145,11 @@ def Menu_untuk_Pembeli(Notes="Selamat datang ((Pembeli))!!"):
     [1] Pilih kategori barang
     [2] Cari barang berdasarkan nama
     [3] Cek daftar barang secara keseluruhan
-    [4] Menuju struk belanja
-    [5] Keluar """)
+    [4] Keluar """)
     #note: 1 --> barang dipisah berdasarkan nama masker
     #      2 --> search nama barang
     #      3 --> tanya di-sort berdasarkan apa --> 
     #      4 --> tertera
-    #      5 --> tertera
     Respon_menu_user = input("\n\t\t>> ")
     # Conditions Respon_menu_user
     # invalid_input --> Menu_untuk_pembeli("Silahkan pilih menu yang tersedia, ((Pembeli))")
@@ -158,8 +161,7 @@ def Menu_untuk_Pembeli(Notes="Selamat datang ((Pembeli))!!"):
     elif Respon_menu_user == "3":
         Menu_pembeli_3()
     elif Respon_menu_user == "4":
-        Menu_pembeli_4()
-    elif Respon_menu_user == "5":
+        # +Feedback
         Menu_User()
     else:
         Menu_untuk_Pembeli()
@@ -283,4 +285,4 @@ def Menu_untuk_Penjual(Notes="Selamat datang kembali ((Penjual))!!"):
     # Conditions Respon_menu_user
     # invalid_input --> Menu_untuk_pembeli("Silahkan pilih menu yang tersedia, ((Pembeli))")
 
-Login_Pembeli()
+Menu_User()
