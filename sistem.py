@@ -234,8 +234,17 @@ def fibonacci_search(list_data, data):
         return size - 1
     return None
 
-def sort():
-    pass
+def insertion_sort(list_data):
+ 
+    for i in range(1, len(list_data)):
+ 
+        key = list_data[i]
+
+        j = i-1
+        while j >=0 and key < list_data[j] :
+                list_data[j+1] = list_data[j]
+                j -= 1
+        list_data[j+1] = key
 
 def is_integer(angka):
     try:
@@ -246,7 +255,6 @@ def is_integer(angka):
         return True 
 
 # decorating material
-
 def Palette_Warna(ColourCode="White", text="", fonteu="Reset"):
     ColourTupleA = ("Black","Red","Green","Orange","Blue","Purple","Cyan","White")
     ColourTupleB = ("Grey","LRed","LGreen","Yellow","LBlue","Pink","LCyan")
