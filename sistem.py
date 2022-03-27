@@ -266,7 +266,7 @@ def Palette_Warna(ColourCode="White", text="", fonteu="Reset"):
     elif ColourCode in ColourTupleB:
         ColourNumber = 90 + ColourTupleB.index(ColourCode)
     FontNumber = FontTuple.index(fonteu)
-    return f"\033[{FontNumber};{ColourNumber};40m{text}\033[0;37;40m"
+    return f"\033[{FontNumber};{ColourNumber};40m{text}\033[0m"
 
 def printc(ColourCode, text, fonteu):
     print(Palette_Warna(ColourCode, text, fonteu))

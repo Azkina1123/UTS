@@ -119,7 +119,7 @@ def Login_Penjual(warning=""):
         answer = input("")
 
         if answer == "//":
-            Login_Penjual("Aktivitas dibatalkan.")
+            Menu_User()
         else:
             form[i] = answer
 
