@@ -7,39 +7,13 @@ import random
 
 class Toko:
     # default attribute/properties toko -----------------------------------
-    def __init__(self, nama, password, lokasi):
+    def __init__(self, nama, password, list_masker):
         # identitas toko
         self.nama = nama
         self.password = password
-        self.lokasi = lokasi
 
         # persediaan toko
-        self.list_masker = [
-            Masker(
-                nama = "Masker KF94 10 Pcs",
-                warna = "Putih", 
-                harga = 12000,
-                jumlah = 100
-            ),
-            Masker(
-                nama = "Masker KF94 50 Pcs",
-                warna = "Putih",
-                harga = 45000,
-                jumlah = 500
-            ),
-            Masker(
-                nama = "Masker KN95 10 Pcs",
-                warna = "Putih",
-                harga = 10000,
-                jumlah = 150
-            ),
-            Masker(
-                nama = "Masker KN95 50 Pcs",
-                warna = "Putih",
-                harga = 40000,
-                jumlah = 500
-            )
-        ] # tempat objek masker yg dijual
+        self.list_masker = list_masker # tempat objek masker yg dijual
 
         self.list_pesanan = []
         self.pesanan_masuk = len(self.list_pesanan)
@@ -163,7 +137,32 @@ akun_toko = [
     Toko(
         nama = "F",
         password = "123",
-        lokasi = "Samarinda"
+        list_masker = [
+            Masker(
+                nama = "Masker KF94 10 Pcs",
+                warna = "Putih", 
+                harga = 12000,
+                jumlah = 100
+            ),
+            Masker(
+                nama = "Masker KF94 50 Pcs",
+                warna = "Putih",
+                harga = 45000,
+                jumlah = 500
+            ),
+            Masker(
+                nama = "Masker KN95 10 Pcs",
+                warna = "Putih",
+                harga = 10000,
+                jumlah = 150
+            ),
+            Masker(
+                nama = "Masker KN95 50 Pcs",
+                warna = "Putih",
+                harga = 40000,
+                jumlah = 500
+            )
+        ]
     )
 ]
 
