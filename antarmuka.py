@@ -315,10 +315,12 @@ def konfirmasi_pesanan(menu):
                         except ValueError:
                             menu(warning="Jumlah barang salah!")
 
-                        if jumlah_masuk_akal(answer):
+                        if answer <= masker.jumlah:
+                            Menu_pembeli_2("Stok tidak mencukupi!")
+                        elif jumlah_masuk_akal(answer) or answer <= masker.jumlah:
                             pass
                         else:
-                            Menu_pembeli_2()
+                            Menu_pembeli_2("Jumlah barang salah!")
                         
                     form[i] = answer
                     

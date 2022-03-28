@@ -57,19 +57,20 @@ class Toko:
 
         self.pendapatan += jumlah * masker.harga
 
-    def kirim_masker(self, nomor, jumlah):
-        no_pesanan = self.list_pesanan[nomor-1][1]
-        pembeli = self.list_pesanan[nomor-1][2]
-        masker = self.list_pesanan[nomor-1][3]
-        index_masker = self.list_masker.index(masker)
+    def kirim_masker(self, no_pesanan, jumlah):
+        for pesanan_masuk in self.list_pesanan:
+            if no_pesanan == pesanan_masuk[1]:
 
-        # kurangi stok di toko
-        self.list_masker[index_masker].kurangi_stok(jumlah)
+                pembeli = pesanan_masuk[2]
+                masker = pesanan_masuk[3]
 
-        for pesanan in pembeli.list_pesanan:
-            if pesanan[1] == no_pesanan:
-                pembeli.list_pesanan.remove(pesanan)
-        
+                # kurangi stok di toko
+                index_masker = self.list_masker.index(masker)
+                self.list_masker[index_masker].kurangi_stok(jumlah)
+
+                for pesanan in pembeli.list_pesanan:
+                    if pesanan[1] == no_pesanan:
+                        pembeli.list_pesanan.remove(pesanan)
     
     def restock_masker(self, nama_masker, jumlah):
         for masker in self.list_masker:
@@ -93,12 +94,12 @@ class Toko:
             tgl = self.list_pesanan[i][0]
             no_pesanan = self.list_pesanan[i][1]
             pembeli = self.list_pesanan[i][2]
-            nama_masker = self.list_pesanan[i][3]
+            masker = self.list_pesanan[i][3]
             jumlah = self.list_pesanan[i][4]
             alamat = self.list_pesanan[i][5]
 
-            print(f"({i}). {tgl} -- {no_pesanan}\
-                \n\t{nama_masker} x {jumlah}\n\t{alamat} -- {pembeli.nama}")
+            print(f"({i+1}). {tgl} -- {no_pesanan}\
+                \n\t{masker.nama} x {jumlah}\n\t{alamat} -- {pembeli.nama}")
 
 
 class Masker:
@@ -141,7 +142,7 @@ class Pembeli:
     def pesan_masker(self, toko, kode, jumlah, alamat):
         for masker in toko.list_masker:
             if masker.kode == kode:
-                no_pesanan = nomor_pesanan()
+                no_pesanan = nomor_pesanan(masker)
                 toko.tambah_pesanan_masuk(no_pesanan, self, masker, jumlah, alamat)
                 self.list_pesanan.append([hari_ini(), no_pesanan, masker, jumlah])
 
@@ -152,7 +153,7 @@ class Pembeli:
             masker = self.list_pesanan[i][2]
             jumlah = self.list_pesanan[i][3]
             print(f"({i+1}). {tanggal} -- [{no_pesanan}]\
-                \n\t{masker.nama} x {jumlah}\tRp{masker.harga*jumlah}", end="")
+                \n\t{masker.nama} x {jumlah}\tRp{masker.harga*jumlah}")
 
 # ==========================================================
 #                           DATA 
@@ -356,15 +357,15 @@ def sort_berdasarkan(kategori):
         
         return list_stok
 
-def nomor_pesanan():
+def nomor_pesanan(masker):
     char = [
         1, 2, 3, 4, 5, 6, 7, 8, 9, 0,
         "a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
         "k", "l", "m", "n", "o", "p", "q", "r", "s", "t",
         "u", "v", "w", "x", "y", "z"
     ]
-    no_pesanan = "FR"
-    for i in range(8):
+    no_pesanan = "FR" + masker.kode
+    for i in range(5):
         random_char = str(random.choice(char))
         no_pesanan += random_char
 
