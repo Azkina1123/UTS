@@ -49,24 +49,26 @@ class Toko:
     def tambah_masker_baru(self, nama_masker, harga, jumlah):
         self.list_masker.append(Masker(nama_masker, harga, jumlah))
 
-    def tambah_pesanan_masuk(self, pembeli, nama_masker, jumlah, alamat):
-        for masker in self.list_masker:
-            if masker.nama == nama_masker:
-                # persediaan masker dikurangi
-                masker.kurangi_stok(jumlah)
+    def tambah_pesanan_masuk(self, no_pesanan, pembeli, masker, jumlah, alamat):
+        # persediaan masker dikurangi
+        masker.kurangi_stok(jumlah)
+        pesanan = [hari_ini(), no_pesanan, pembeli, masker, jumlah, alamat]
+        self.list_pesanan.append(pesanan)
 
-                pesanan = [hari_ini(), pembeli, masker, jumlah, alamat]
-                self.list_pesanan.append(pesanan)
-
-                self.pendapatan += jumlah * masker.harga
+        self.pendapatan += jumlah * masker.harga
 
     def kirim_masker(self, nomor, jumlah):
-        pembeli = self.list_pesanan[nomor-1][1]
-        masker = self.list_pesanan[nomor-1][2]
+        no_pesanan = self.list_pesanan[nomor-1][1]
+        pembeli = self.list_pesanan[nomor-1][2]
+        masker = self.list_pesanan[nomor-1][3]
         index_masker = self.list_masker.index(masker)
+
+        # kurangi stok di toko
         self.list_masker[index_masker].kurangi_stok(jumlah)
 
-        pembeli.list_pesanan.pop(nomor)
+        for pesanan in pembeli.list_pesanan:
+            if pesanan[1] == no_pesanan:
+                pembeli.list_pesanan.remove(pesanan)
         
     
     def restock_masker(self, nama_masker, jumlah):
@@ -89,12 +91,14 @@ class Toko:
     def tampilkan_pesanan(self):
         for i in range(len(self.list_pesanan)):
             tgl = self.list_pesanan[i][0]
-            nama_pembeli = self.list_pesanan[i][1].nama
-            nama_masker = self.list_pesanan[i][2]
-            jumlah = self.list_pesanan[i][3]
-            alamat = self.list_pesanan[i][4]
+            no_pesanan = self.list_pesanan[i][1]
+            pembeli = self.list_pesanan[i][2]
+            nama_masker = self.list_pesanan[i][3]
+            jumlah = self.list_pesanan[i][4]
+            alamat = self.list_pesanan[i][5]
 
-            print(f"({i}). {tgl}\t{nama_masker} x {jumlah}\n\t{alamat}")
+            print(f"({i}). {tgl} -- {no_pesanan}\
+                \n\t{nama_masker} x {jumlah}\n\t{alamat} -- {pembeli.nama}")
 
 
 class Masker:
@@ -137,16 +141,18 @@ class Pembeli:
     def pesan_masker(self, toko, kode, jumlah, alamat):
         for masker in toko.list_masker:
             if masker.kode == kode:
-                no_pesanan = 123
-                toko.tambah_pesanan_masuk(self, kode, jumlah, alamat)
-                self.list_pesanan.append([hari_ini(), masker, jumlah, ])
+                no_pesanan = nomor_pesanan()
+                toko.tambah_pesanan_masuk(no_pesanan, self, masker, jumlah, alamat)
+                self.list_pesanan.append([hari_ini(), no_pesanan, masker, jumlah])
 
     def tampilkan_pesanan(self):
         for i in range(len(self.list_pesanan)):
             tanggal = self.list_pesanan[i][0]
-            masker = self.list_pesanan[i][1]
-            jumlah = self.list_pesanan[i][2]
-            print(f"({i+1}). {tanggal}\t{masker.nama} x {jumlah}\tRp{masker.harga*jumlah}", end="")
+            no_pesanan = self.list_pesanan[i][1]
+            masker = self.list_pesanan[i][2]
+            jumlah = self.list_pesanan[i][3]
+            print(f"({i+1}). {tanggal} -- [{no_pesanan}]\
+                \n\t{masker.nama} x {jumlah}\tRp{masker.harga*jumlah}", end="")
 
 # ==========================================================
 #                           DATA 
@@ -154,8 +160,8 @@ class Pembeli:
 
 akun_toko = [
     Toko(
-        nama = "FORTRAN",
-        password = "F0rtR355",
+        nama = "F",
+        password = "123",
         lokasi = "Samarinda"
     )
 ]
@@ -238,9 +244,12 @@ def masker_dipilih(nama):
 
 # return Boolean
 def jumlah_masuk_akal(jumlah):
-    if jumlah > 0:
-        return True
-    else:
+    try:
+        if jumlah > 0:
+            return True
+        else:
+            return False
+    except:
         return False
 
 # return int atau None
@@ -347,6 +356,19 @@ def sort_berdasarkan(kategori):
         
         return list_stok
 
+def nomor_pesanan():
+    char = [
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 0,
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
+        "k", "l", "m", "n", "o", "p", "q", "r", "s", "t",
+        "u", "v", "w", "x", "y", "z"
+    ]
+    no_pesanan = "FR"
+    for i in range(8):
+        random_char = str(random.choice(char))
+        no_pesanan += random_char
+
+    return no_pesanan
 
 # decorating material
 def Palette_Warna(ColourCode="White", text="", fonteu="Reset"):
