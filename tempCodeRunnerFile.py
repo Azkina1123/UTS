@@ -1,1 +1,0 @@
-kode = kode_masker()

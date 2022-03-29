@@ -25,7 +25,7 @@ for i in range(len(nama)):
         warna = warna[i],
         harga = harga[i],
         jumlah = jumlah[i],
-        kode = kode_masker(nama[i], warna[i])
+        kode = kode_masker(i+1, warna[i])
     )
 
 

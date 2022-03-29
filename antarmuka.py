@@ -208,8 +208,9 @@ def Menu_untuk_Penjual(warning=""):
         Berikut Opsi Interaktif Kami, {akun_now.nama}!!
         [1] Lihat daftar seluruh masker 
         [2] Cari masker
-        [3] Daftar pesanan masuk
-        [4] Keluar """
+        [3] Tambah Masker Jenis Baru
+        [4] Daftar pesanan masuk
+        [5] Keluar """
     )
 
     Respon_menu_user = input("\n\t\t>> ")
@@ -219,8 +220,10 @@ def Menu_untuk_Penjual(warning=""):
     elif Respon_menu_user == "2":
         menu_searching(Menu_untuk_Penjual)
     elif Respon_menu_user == "3":
-        menu_pesanan_penjual()
+        menu_tambah_masker()
     elif Respon_menu_user == "4":
+        menu_pesanan_penjual()
+    elif Respon_menu_user == "5":
         # +Feedback
         Menu_User()
     else:
@@ -463,6 +466,39 @@ def transaksi_pesanan(subjudul, list_masker, warning=""):
 
 # = = = = = = = = = = = = = = = = = = MENU.PENJUAL = = = = = = = = = = = = = = = = = = = 
 
+def menu_tambah_masker(warning=""):
+    clear()
+    print("\tTambahkan Masker Baru")
+    print(f"\t\n{warning}\n")
+    print("Ketik '//' untuk membatalkan aktivitas\n")
+
+    form = ["Nama masker", "Warna", "Harga", "Jumlah"]
+    for i in range(len(form)):
+        answer = input(f"\t{form[i].ljust(15)}: ")
+
+        if answer == "//":
+            Menu_untuk_Penjual("Aktivitas dibatalkan.")
+        elif form[i] in (form[2], form[3]):
+            try:
+                answer = int(answer)
+            except ValueError:
+                menu_tambah_masker(warning=f"{form[i]} tidak valid!")
+        form[i] = answer
+        
+    akun_now.tambah_masker_baru(
+        nama_masker = form[0],
+        warna = form[1],
+        harga = form[2],
+        jumlah = form[3],
+        kode = kode_masker(
+            num = len(akun_now.list_masker)-1, 
+            warna = form[1]
+        )
+    )
+
+    Menu_untuk_Penjual("Berhasil menambahkan masker!")
+    
+
 # daftar pesanan masuk + kirim barang
 def menu_pesanan_penjual(warning=""):
     clear()
@@ -581,7 +617,13 @@ def edit_masker(masker, warning=""):
             jumlah = int(input("Jumlah\t: "))
 
             if jumlah_masuk_akal(jumlah):
-                masker.tambah_stok(jumlah)
+                print(masker.kode)
+                input()
+                akun_now.restok_masker(
+                    mode = "tambah",
+                    kode = masker.kode,
+                    jumlah = jumlah
+                )
 
             else:
                 edit_masker(
@@ -601,7 +643,11 @@ def edit_masker(masker, warning=""):
             jumlah = int(input("Jumlah\t: "))
 
             if jumlah_masuk_akal(jumlah):
-                masker.kurangi_stok(jumlah)
+                akun_now.restok_masker(
+                    mode = "kurang",
+                    kode = masker.kode,
+                    jumlah = jumlah
+                )
 
             else:
                 edit_masker(
@@ -620,8 +666,7 @@ def edit_masker(masker, warning=""):
 
         for mask in akun_now.list_masker:
             if mask == masker:
-                print(f"{mask} telah berhasil dihapus.")
-                akun_now.list_masker.remove(mask)
+                akun_now.hapus_masker(masker.kode)
 
     # kembali ke menu            
     elif Respon_menu_user == "4":

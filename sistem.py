@@ -2,6 +2,7 @@
 
 from curses.ascii import isspace
 import os
+from select import select
 import time
 import datetime as dt
 import random
@@ -44,8 +45,44 @@ class Toko:
 
         update_toko()
 
-    def hapus_masker(self):
-        pass
+    def hapus_masker(self, kode):
+        con = sqlite3.connect("database.db")
+        cur = con.cursor()
+
+        hapus = f"""DELETE FROM tabel_masker
+                    WHERE kode = '{kode}'"""
+        cur.execute(hapus)
+
+        con.commit()
+        con.close()
+
+        update_toko()
+
+    def restok_masker(self, mode, kode, jumlah):
+        con = sqlite3.connect("database.db")
+        cur = con.cursor()
+
+        select_data = """SELECT * FROM tabel_masker"""
+        list_masker = list(cur.execute(select_data))
+        print(list_masker)
+        input("=====================")
+
+        for masker in list_masker:
+            if masker[0] == kode:
+                if mode == "tambah":
+                    input("Masukk?????")
+                    tambah = f"""UPDATE tabel_masker 
+                    SET jumlah = {masker[4] + jumlah}
+                    WHERE kode = '{kode}'"""
+                    cur.execute(tambah)
+                else:
+                    kurang = f"""UPDATE tabel_masker 
+                    SET jumlah = {masker[4] - jumlah}
+                    WHERE kode = '{kode}'"""
+                    cur.execute(kurang)
+        con.commit()
+        con.close()
+        update_toko()
 
     def tambah_pesanan_masuk(self, no_pesanan, pembeli, masker, jumlah, alamat):
         con = sqlite3.connect("database.db")
@@ -152,7 +189,7 @@ class Masker:
 
         kurangi = f"""UPDATE tabel_masker 
         SET jumlah = {self.jumlah - jumlah}
-        WHERE nama_masker = '{self.nama}'"""
+        WHERE nama_masker = '{self.kode}'"""
 
         cur.execute(kurangi)
         con.commit()
@@ -420,8 +457,8 @@ def nomor_pesanan(masker):
 
     return no_pesanan
 
-def kode_masker(nama, warna):
-    return f"ms{len(akun_toko[0].list_masker)+1}{warna[0]}"
+def kode_masker(num, warna):
+    return f"ms{num}{warna[0]}"
 
 # decorating material ......................................................
 def Palette_Warna(ColourCode="White", text="", fonteu="Reset"):
@@ -457,7 +494,7 @@ def update_toko():
                 warna = masker[2],
                 harga = masker[3],
                 jumlah = masker[4],
-                kode = kode_masker(masker[1], masker[2])
+                kode = masker[0]
             )
         )
 
