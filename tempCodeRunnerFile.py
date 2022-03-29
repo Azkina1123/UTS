@@ -1,1 +1,1 @@
-self.list_masker.append(Masker(nama, warna, harga, jumlah))
+from sistem import *

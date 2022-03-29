@@ -1,36 +1,25 @@
 from sistem import *
 
-# Menu?
-def Menu_User():
-    clear()
+# ==================================== LOGIN ====================================
 
+#Notifikasi Keberhasilan
+def Notif_berhasil_login():
     print(f"""\n\n\n\n\n
 O                                          O
 :                                          :
-:                  [{Palette_Warna("Green","•","Bold")}--]                   :
+:                  [{Palette_Warna("Green","•••","Bold")}]                   :
 :__________________________________________:
-|'            !Selamat Datang!            '|
+|'                                        '|
+|           {Palette_Warna("LGreen","!LOGIN ANDA BERHASIL!","Bold")}          |
+|         mohon tunggu sebentar...         |
 |                                          |
-|      Masuk ke dalam program sebagai:     |
-|    [1] Pembeli            [2] Penjual    |
  \________________________________________/""")
+    tclear(2)
 
-
-    Respon_Menu_User = input("\n\t\t  >> ")
-    if Respon_Menu_User == "1":
-        #cls
-        Login_Pembeli()
-    elif Respon_Menu_User == "2":
-        #cls
-        Login_Penjual()
-    else:
-        printc ("LRed",f"\t  Menu < {Respon_Menu_User} > tidak tersedia","Bold")
-        tclear(2)
-        Menu_User()
-
-akun_pembeli_now = akun_pembeli[0]
+akun_now = akun_toko[0]
 def Login_Pembeli(warning="                                          "):
-    global akun_pembeli_now
+    global akun_now
+
     clear()
     print(f"""\n\n\n\n\n
 O                                          O
@@ -78,12 +67,12 @@ O                                          O
             if nama_sudah_ada(akun_pembeli, nama) and password_benar(akun_pembeli, nama, password):
 
                 # berhasil masuk, sekarang di akun si yg namanya diinput tadi
-                akun_pembeli_now = [pembeli for pembeli in akun_pembeli if pembeli.nama == nama]
-                akun_pembeli_now = akun_pembeli_now[0]
+                akun_now = [pembeli for pembeli in akun_pembeli if pembeli.nama == nama]
+                akun_now = akun_now[0]
 
                 # masuk menu
                 Notif_berhasil_login()
-                Menu_untuk_Pembeli(akun_pembeli_now.nama)
+                Menu_untuk_Pembeli()
 
             else:
                 Login_Pembeli(Palette_Warna("LRed","               Gagal Login!               ","Bold"))
@@ -98,13 +87,12 @@ O                                          O
             else:
                 # buat akun. masukkan ke list akun_pembeli di sistem
                 akun_baru = Pembeli(nama, password)
-                akun_pembeli.append(akun_baru)
+                update_pembeli()
                 Login_Pembeli(Palette_Warna("LGreen","            Sign up Berhasil!!            ","Bold"))
             
-
 gagal_masuk_toko = 0
 def Login_Penjual(warning=""):
-    global gagal_masuk_toko
+    global gagal_masuk_toko, akun_now
 
     clear()
     print("\n\n\n\n\n")
@@ -131,6 +119,8 @@ def Login_Penjual(warning=""):
 
         # berhasil masuk
         gagal_masuk_toko = 0
+        akun_now = [penjual for penjual in akun_toko if penjual.nama == nama]
+        akun_now = akun_now[0]
         Menu_untuk_Penjual()
 
     else:
@@ -144,35 +134,43 @@ def Login_Penjual(warning=""):
         Login_Penjual(f"Gagal login ({gagal_masuk_toko})")
 
 
-#Notifikasi Keberhasilan
-def Notif_berhasil_login():
+# ===================================== MENU ======================================
+
+# Menu?
+def Menu_User():
+    clear()
+
     print(f"""\n\n\n\n\n
 O                                          O
 :                                          :
-:                  [{Palette_Warna("Green","•••","Bold")}]                   :
+:                  [{Palette_Warna("Green","•","Bold")}--]                   :
 :__________________________________________:
-|'                                        '|
-|           {Palette_Warna("LGreen","!LOGIN ANDA BERHASIL!","Bold")}          |
-|         mohon tunggu sebentar...         |
+|'            !Selamat Datang!            '|
 |                                          |
+|      Masuk ke dalam program sebagai:     |
+|    [1] Pembeli            [2] Penjual    |
  \________________________________________/""")
-    tclear(2)
 
 
+    Respon_Menu_User = input("\n\t\t  >> ")
+    if Respon_Menu_User == "1":
+        #cls
+        Login_Pembeli()
+    elif Respon_Menu_User == "2":
+        #cls
+        Login_Penjual()
+    else:
+        printc ("LRed",f"\t  Menu < {Respon_Menu_User} > tidak tersedia","Bold")
+        tclear(2)
+        Menu_User()
 
-#------------------------- Menu Sebenarnya -------------------------#
-
-# = = = = = = = = = = = = = = = = = = MENU PEMBELI = = = = = = = = = = = = = = = = = = 
-
-
-def Menu_untuk_Pembeli(pembeli="Pembeli", warning=""):
+def Menu_untuk_Pembeli(warning=""):
     clear()
-
     print(f""" 
     
     {warning}
     
-    Berikut Opsi Interaktif Kami, {pembeli}!!
+    Berikut Opsi Interaktif Kami, {akun_now.nama}!!
     [1] Lihat daftar seluruh barang
     [2] Cari nama barang
     [3] Daftar pesanan
@@ -186,19 +184,53 @@ def Menu_untuk_Pembeli(pembeli="Pembeli", warning=""):
     # invalid_input --> Menu_untuk_pembeli("Silahkan pilih menu yang tersedia, ((Pembeli))")
 
     if Respon_menu_user == "1":
-        Menu_pembeli_1()
+        menu_sorting()
     elif Respon_menu_user == "2":
-        Menu_pembeli_2()
+        menu_searching()
     elif Respon_menu_user == "3":
-        Menu_pembeli_3()
+        menu_pesanan_pembeli()
     elif Respon_menu_user == "4":
         # +Feedback
         Menu_User()
     else:
-        Menu_untuk_Pembeli(akun_pembeli_now.nama, "Opsi tidak tersedia!")
+        Menu_untuk_Pembeli(warning="Opsi tidak tersedia!")
 
-# pilih kategori barang
-def Menu_pembeli_1(warning=""):
+def Menu_untuk_Penjual(warning=""):
+    clear()
+
+    print(
+        f""" 
+    
+        {warning}
+        
+        Berikut Opsi Interaktif Kami, {akun_now.nama}!!
+        [1] Lihat daftar seluruh masker 
+        [2] Cari masker
+        [3] Daftar pesanan masuk
+        [4] Keluar """
+    )
+
+    Respon_menu_user = input("\n\t\t>> ")
+
+    if Respon_menu_user == "1":
+        menu_sorting()
+    elif Respon_menu_user == "2":
+        menu_searching()
+    elif Respon_menu_user == "3":
+        menu_pesanan_penjual()
+    elif Respon_menu_user == "4":
+        # +Feedback
+        Menu_User()
+    else:
+        Menu_untuk_Pembeli(
+            warning="Opsi tidak tersedia!"
+        )
+
+
+# = = = = = = = = = = = = = = = = = MENU YANG SAMA = = = = = = = = = = = = = = = = = = 
+
+# sorting masker + beli masker (pembeli) v edit masker (penjual)
+def menu_sorting(warning=""):
     clear()
 
     print(f"""
@@ -212,164 +244,382 @@ def Menu_pembeli_1(warning=""):
     [4] Berdasarkan Harga Terendah
     [5] Berdasarkan Harga Tertinggi
     [6] Kembali""")
-
     kategori = input("\n\t>> ")
-    #if-if-if-if)
 
+    # kondisi
     list_masker = None
+    indikator = None
     if kategori == "1":
-        list_masker = sort_berdasarkan("nama")
+        indikator = "nama"
+        list_masker = sort_berdasarkan(indikator)
     elif kategori == "2":
-        list_masker = sort_berdasarkan("warna")
+        indikator = "warna"
+        list_masker = sort_berdasarkan(indikator)
     elif kategori == "3":
-        list_masker = sort_berdasarkan("stok")
+        indikator = "stok"
+        list_masker = sort_berdasarkan(indikator)
     elif kategori == "4":
-        list_masker = sort_berdasarkan("harga")
+        indikator = "harga (ascending)"
+        list_masker = sort_berdasarkan(indikator)
     elif kategori == "5":
-        list_masker = sort_berdasarkan("harga")
+        indikator = "harga (descending)"
+        list_masker = sort_berdasarkan(indikator)
         list_masker = [list_masker[i] for i in range(len(list_masker)-1, -1, -1)]
-    elif kategori == "6":
-        Menu_untuk_Pembeli(akun_pembeli_now.nama)
-    else:
-        Menu_pembeli_1("Opsi tidak tersedia!")
 
-    # tampilkan daftar masker
+    # kembali ke menu
+    elif kategori == "6":
+        if type(akun_now) == Pembeli:
+            Menu_untuk_Pembeli()
+        else:
+            Menu_untuk_Penjual()
+    # warning
+    else:
+        menu_sorting(warning="Opsi tidak tersedia!")
+
+    tampilkan_daftar_masker(
+        subjudul = f"Sort berdasarkan {indikator}.",
+        list_masker = list_masker
+    )
+
+# search masker
+def menu_searching(warning=""):
+    clear()
+    print(f"\t{warning}")
+    Barang_dituju = input("\n Cari masker: ")
+    print()
+
+    # masker yg dicari ada
+    if masker_tersedia(Barang_dituju):
+
+        # tampilkan masker
+        masker_ditemukan = masker_dipilih(Barang_dituju)
+        tampilkan_daftar_masker(
+            subjudul = f"Hasil pencarian '{Barang_dituju}.'",
+            list_masker = masker_ditemukan
+        )
+
+    # masker yg dicari tidak ada
+    else:
+
+        #timed cls 1s
+        for i in range(3,0,-1):
+            print(f"\n\n \t\tBarang tidak ditemukan atau sedang tidak tersedia ({i}s)")
+        menu_searching()
+
+# tampilan daftar masker
+def tampilkan_daftar_masker(subjudul, list_masker, warning=""):
     clear()
     print("\tDaftar Masker")
     print("\t=============")
+    print(f"\t{subjudul}")
+    print(f"\t{warning}")
+
+    # tampilkan daftar masker
+    print(("█"*50).center(30))
     i = 1
     for masker in list_masker:
-        print(f"\t---- {i} -----")
+        print(f"---- {i} ----".center(30))
         masker.tampilkan_data()
         print()
+        print(("█"*50).center(30))
         i += 1
 
-    # tanyakan apakah mau beli
-    konfirmasi_pesanan(Menu_pembeli_1)
+    # di akun pembeli --> tanyakan apakah ingin beli
+    if type(akun_now) == Pembeli:
+        transaksi_pesanan(
+            subjudul, 
+            list_masker
+        )
+
+    # di akun penjual --> tanyakan apakah ingin manipulasi masker
+    else:
+        pilih_masker(
+            subjudul,
+            list_masker
+        )
     
 
-def Menu_pembeli_2(warning=""):
-    clear()
-    print(f"\t{warning}")
-    Barang_dituju = input("\n Cari barang: ")
-    print()
-    #cls
-
-    #if Barang_dituju in ListBarang --> "\n\n\t\tbarang ditemukan!: ", tampilkan barang dan stok
-    if masker_tersedia(Barang_dituju):
-
-    # tampilkan masker-masker yang namanya berkaitan dgn yg dicari
-        masker_ditemukan = masker_dipilih(Barang_dituju)
-        print(("█"*50).center(30))
-        i = 1
-        for masker in masker_ditemukan:
-            print(f"---- {i} ----".center(30))
-            masker.tampilkan_data() # di class Pembeli
-            print()
-            print(("█"*50).center(30))
-            i += 1
-
-        # user pilih masker mana yg mau dibeli
-        konfirmasi_pesanan(Menu_pembeli_2)
-
-    # #if Barang_dituju not in ListBarang -->
-    else:
-        for i in range(3,0,-1):
-            print(f"\n\n \t\tBarang tidak ditemukan atau sedang tidak tersedia ({i}s)")
-
-    #timed cls 1s
+# = = = = = = = = = = = = = = = = = = MENU.PEMBELI = = = = = = = = = = = = = = = = = = = 
 
 # daftar pesanan pembeli
-def Menu_pembeli_3(warning=""):
+def menu_pesanan_pembeli():
     clear()
+
+    # judul halaman
     print("\n\n\tDaftar Pesanan Anda")
     print("\t===================\n")
-    if len(akun_pembeli_now.list_pesanan) == 0:
+
+    # jika belum pesan apa-apa
+    if len(akun_now.list_pesanan) == 0:
         print("\tAnda belum membeli barang.")
+        
         input("\n\n\t\tKembali => ")
         Menu_untuk_Pembeli()
+    # jika sudah pesan
     else:
-        akun_pembeli_now.tampilkan_pesanan()
+        akun_now.tampilkan_pesanan()
+        
         input("\n\n\t\tKembali =>")
-        Menu_untuk_Pembeli(akun_pembeli_now)
+        Menu_untuk_Pembeli()
 
+# tanyakan apakah melakukan transaksi
+def transaksi_pesanan(subjudul, list_masker):
+    # pilihan setelah melihat daftar masker
+    print(
+        f"\n\t[1] Pesan masker\
+        \n\t[2] Kembali"
+    )
+    respon = input("\n\t>> ")
 
-def konfirmasi_pesanan(menu):
-    respon = input("\tKetik '1' jika ingin membeli\n\t>> ")
+    # jika pesan masker
     if respon == "1":
-        print("\n(Masukkan kode masker)")
-        kode_masker = input("Barang yang ingin dibeli : ")
+        kode_masker = input("\n\tKode masker\t: ")
 
-        for masker in daftar_masker:
-            if masker.kode == kode_masker:
-                print()
+        # cek kode ada atau tidak
+        index_masker = fibonacci_search(
+            list_data = [masker.kode for masker in daftar_masker],
+            data = kode_masker
+        )
 
-                # lanjutkan pembelian
-                form = ["Jumlah barang", "Alamat Anda"]
-                for i in range(len(form)):
-                    answer = input(f"{form[i].ljust(10)} : ")
+        # jika masker ada
+        if index_masker is not None:
+            print() 
 
-                    if i == 0:
-                        try:
-                            answer = int(answer)
-                        except ValueError:
-                            menu(warning="Jumlah barang salah!")
+            masker = daftar_masker[index_masker]
 
-                        if answer <= masker.jumlah:
-                            Menu_pembeli_2("Stok tidak mencukupi!")
-                        elif jumlah_masuk_akal(answer) or answer <= masker.jumlah:
-                            pass
-                        else:
-                            Menu_pembeli_2("Jumlah barang salah!")
-                        
-                    form[i] = answer
-                    
+            form = ["Jumlah barang", "Alamat Anda"]
+            for i in range(len(form)):
+                answer = input(f"\t{form[i].ljust(15)} : ")
+
+                # jumlah yg dimasukkan
+                if i == 0:
+                    if jumlah_masuk_akal(answer) and answer <= masker.jumlah:
+                        tampilkan_daftar_masker(
+                            subjudul,
+                            list_masker,
+                            warning = "Stok tidak mencukupi!"
+                        )
+                    else:
+                        tampilkan_daftar_masker(
+                            subjudul,
+                            list_masker,
+                            warning = "Jumlah tidak valid"
+                        )
+
+                form[i] = answer
+
                 """ PROSES PEMBELIAN
-                akun_pembeli_now = akun yg login
+                akun_now = akun yg login
                 akun_toko[0]        = akun toko ini
                 form[0]             = jumlah barang
                 form[1]             = alamat barang
                 """
 
-                print(f"\nAnda memesan {masker.nama} warna {masker.warna}\
-                    \nseharga Rp{masker.harga} sebanyak {form[0]} buah ke alamat {form[1]}.\
-                    \nTotal yang harus dibayar adalah Rp{form[0]*masker.harga}")
-                respon = input("\nKetik '1' untuk melanjutkan pembelian\n>> ")
+                print(f"\tTotal yang harus dibayar adalah Rp{form[0]*masker.harga}")
+                respon = input("\n\tKetik '1' untuk melanjutkan pembelian\n\t>> ")
         
                 if respon == "1":
                     # pesanan diproses
-                    akun_pembeli_now.pesan_masker(akun_toko[0], kode_masker, form[0], form[1])
-                    Menu_untuk_Pembeli(akun_pembeli_now.nama, "Pembelian berhasil!")
+                    akun_now.pesan_masker(akun_toko[0], kode_masker, form[0], form[1])
+                    Menu_untuk_Pembeli(warning="Pembelian berhasil!")
 
                 else:
                     # pesanan batal
-                    menu(warning="Pembelian dibatalkan.")
+                    tampilkan_daftar_masker(
+                        subjudul,
+                        list_masker,
+                        warning="Pembelian dibatalkan."
+                    )
+                
+        # jika tidak ada
         else:
-            # barang g ada
-            menu(warning="Barang tidak ditemukan!")
+            tampilkan_daftar_masker(
+                subjudul,
+                list_masker,
+                warning="Masker tidak ditemukan!"
+            )
+
+    # jika tidak pesan masker
+    elif respon == "2":
+        input("\n\t\tKembali => ")
+        Menu_untuk_Pembeli()
+
+    # jika opsi tidak tersedia
     else:
-        menu()
+        tampilkan_daftar_masker(warning="Opsi tidak tersedia!")
 
-def Menu_pembeli_4():
-    #strukbelanja(For i in struk belanja, terurut berdasarkan waktu pemesanan)
-    pass
 
-        
-# = = = = = = = = = = = = = = = = = = MENU PENJUAL = = = = = = = = = = = = = = = = = = 
+# = = = = = = = = = = = = = = = = = = MENU.PENJUAL = = = = = = = = = = = = = = = = = = = 
 
-def Menu_untuk_Penjual(Notes="Selamat datang kembali ((Penjual))!!"):
+# daftar pesanan masuk + kirim barang
+def menu_pesanan_penjual(warning=""):
     clear()
 
-    print(f""" {Notes}
-    [1] Tambahkan masker baru
-    [2] Hapus masker yang sudah ada""")
-    #note: 1 --> barang dipisah berdasarkan nama masker
-    #      2 --> search nama barang
-    #      3 --> tanya di-sort berdasarkan apa --> 
-    #      4 --> tertera
-    #      5 --> tertera
-    Respon_menu_user = int(input("\n\t\t>>"))
-    # Conditions Respon_menu_user
-    # invalid_input --> Menu_untuk_pembeli("Silahkan pilih menu yang tersedia, ((Pembeli))")
+    # judul halaman
+    print("\n\n\tDaftar Pesanan Masuk")
+    print("\t===================\n")
+    print(f"{warning}")
 
-Menu_untuk_Pembeli()
+    # jika daftar pesanan masih kosong
+    if len(akun_now.list_pesanan) == 0:
+        print("\tBelum ada pesanan masuk.")
+        input("\n\n\t\tKembali => ")
+        Menu_untuk_Penjual()
+
+    # jika daftar pesanan sudah terisi
+    else:
+        akun_now.tampilkan_pesanan()
+
+        respon = input("\n\nKetik '1' untuk mengirim masker\n\t>> ")
+
+        # jika benar-benar membeli
+        if respon == "1":
+            no_pesanan = input("Nomor pesanan\t:")
+
+            for pesanan in akun_now.list_pesanan:
+                if no_pesanan == pesanan[1]:
+                    akun_now.kirim_masker(
+                        no_pesanan = no_pesanan,
+                        jumlah = pesanan[4]
+                    )
+
+                    print(f"\nPesanan {no_pesanan} telah berhasil dikirim!")
+            else:
+                menu_pesanan_penjual(warning="Masker tidak ditemukan!")
+
+        input("\n\n\t\tKembali =>")
+        Menu_untuk_Penjual()
+
+# masker yang mau diedit
+def pilih_masker(subjudul, list_masker):
+    # menu yang tersedia
+    print(
+        "\n\t[1] Ubah masker\
+        \n\t[2] Kembali"
+    )
+    respon = input("\n\t>> ")
+    
+    # ubah masker
+    if respon == "1":
+        kode_masker = input("Kode masker : ")
+        clear()
+
+        # cek masker
+        index_masker = fibonacci_search(
+            list_data = [masker.kode for masker in daftar_masker],
+            data = kode_masker
+        )
+
+        # edit masker yg dicari
+        if index_masker is not None:
+            edit_masker(daftar_masker[index_masker])
+
+            # jika batal edit masker
+            tampilkan_daftar_masker(
+                subjudul,
+                list_masker
+            )
+
+        # masker yg dicari tidak ada
+        else:
+            tampilkan_daftar_masker(
+                subjudul,
+                list_masker,
+                warning = "Masker tidak ditemukan."
+            )
+
+    # kembali
+    elif respon == "2":
+        Menu_untuk_Penjual()
+
+    # opsi tidak tersedia
+    else:
+        tampilkan_daftar_masker(
+            subjudul, 
+            list_masker,
+            warning = "Opsi tidak tersedia!"
+        )
+
+# menu manipulasi stok masker
+def edit_masker(masker, warning=""):
+    clear()
+
+    print("\n\n")
+    masker.tampilkan_data()
+
+    print(f""" 
+
+    {warning}
+    
+    [1] Tambah stok masker
+    [2] Kurangi stok masker
+    [3] Hapus masker
+    [4] Kembali """)
+
+    Respon_menu_user = input("\n\t\t>> ")
+    print()
+
+    # tambah stok
+    if Respon_menu_user == "1":
+        try:
+            jumlah = int(input("Jumlah\t: "))
+
+            if jumlah_masuk_akal(jumlah):
+                masker.tambah_stok()
+
+            else:
+                edit_masker(
+                    masker, 
+                    warning="Jumlah tidak valid!"
+                )
+
+        except ValueError:
+            edit_masker(
+                masker, 
+                warning="Jumlah tidak valid!"
+            )
+        
+    # kurangi stok
+    elif Respon_menu_user == "2":
+        try:
+            jumlah = int(input("Jumlah\t: "))
+
+            if jumlah_masuk_akal(jumlah):
+                masker.kurangi_stok()
+
+            else:
+                edit_masker(
+                    masker, 
+                    warning = "Jumlah tidak valid!"
+                )
+            
+        except ValueError:
+            edit_masker(
+                masker, 
+                warning = "Jumlah tidak valid!"
+            )
+    
+    # hapus masker
+    elif Respon_menu_user == "3":
+
+        for mask in akun_now.list_masker:
+            if mask == masker:
+                print(f"{mask} telah berhasil dihapus.")
+                akun_now.list_masker.remove(mask)
+
+    # kembali ke menu            
+    elif Respon_menu_user == "4":
+        pass
+
+    # opsi tidak tersedia
+    else:
+        edit_masker(
+            masker, 
+            warning="Opsi tidak tersedia!"
+        )
+
+# ==================================== START ====================================
+
+if __name__ == "__main__":
+    while True:
+        Menu_User()
