@@ -1,1 +1,1 @@
-from sistem import *
+kode = kode_masker()

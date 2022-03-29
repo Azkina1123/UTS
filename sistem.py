@@ -1,5 +1,6 @@
 # TEMPATNYA FUNGSI-FUNGSI DAN PENYIMPANAN
 
+from curses.ascii import isspace
 import os
 import time
 import datetime as dt
@@ -22,15 +23,15 @@ class Toko:
         self.pendapatan = 0
 
     # method = fungsi yg cuma bisa dipake objek Toko ----------------------
-    def tambah_masker_baru(self, nama_masker, warna, harga, jumlah):
-        self.list_masker.append(Masker(nama_masker, warna, harga, jumlah))
+    def tambah_masker_baru(self, nama_masker, warna, harga, jumlah, kode):
+        self.list_masker.append(Masker(nama_masker, warna, harga, jumlah, kode))
         
         con = sqlite3.connect("database.db")
         cur = con.cursor()
 
         # kode_masker, nama_masker, warna, harga, jumlah
         tambahkan_masker = f'''INSERT INTO tabel_masker VALUES (
-            '{self.list_masker[len(self.list_masker)-1].kode}', 
+            '{kode}', 
             '{nama_masker}', 
             '{warna}', 
             {harga}, 
@@ -43,6 +44,9 @@ class Toko:
 
         update_toko()
 
+    def hapus_masker(self):
+        pass
+
     def tambah_pesanan_masuk(self, no_pesanan, pembeli, masker, jumlah, alamat):
         con = sqlite3.connect("database.db")
         cur = con.cursor()
@@ -52,11 +56,11 @@ class Toko:
 
         # tanggal, no_pesanan, nama_masker, jumlah, total, nama_pembeli, alamat
         tambah_pesanan = f'''INSERT INTO tabel_pesanan_penjual VALUES (
-            '{hari_ini()}', 
+            '{hari_ini()}',
             '{no_pesanan}', 
             '{masker.nama}',
-            '{jumlah}' 
-            '{masker.harga*jumlah}',
+            {jumlah},
+            {masker.harga*jumlah},
             '{pembeli.nama}',
             '{alamat}',
             'belum dikirim'
@@ -72,8 +76,8 @@ class Toko:
         con = sqlite3.connect("database.db")
         cur = con.cursor()
 
-        hapus_pesanan = f'''DELETE FROM tabel_pesanan_penjual 
-                            WHERE nomor_pesanan = {no_pesanan}'''
+        hapus_pesanan = f"""DELETE FROM tabel_pesanan_penjual 
+                            WHERE nomor_pesanan = '{no_pesanan}'"""
         cur.execute(hapus_pesanan)
 
         con.commit()
@@ -81,14 +85,14 @@ class Toko:
 
         update_toko()
 
-    def kirim_pesanan(self, no_pesanan):
+    def kirim_masker(self, no_pesanan):
         con = sqlite3.connect("database.db")
         cur = con.cursor()
 
         # update database
-        update_status = f'''UPDATE tabel_pesanan_penjual
+        update_status = f"""UPDATE tabel_pesanan_penjual
                             SET status = 'sudah dikirim'
-                            WHERE nomor_pesanan = {no_pesanan}'''
+                            WHERE nomor_pesanan = '{no_pesanan}'"""
         cur.execute(update_status)
 
         con.commit()
@@ -104,35 +108,37 @@ class Toko:
             nama_masker = pesanan[2]
             jumlah = pesanan[3]
             total = pesanan[4]
-            pembeli = pesanan[5]
+            nama_pembeli = pesanan[5]
             alamat = pesanan[6]
+            status = pesanan[7]
             
             print(f"({i}). {tanggal} -- {no_pesanan}\
                 \n\t{nama_masker} x {jumlah}\tRp{total}\
-                \n\t{alamat} -- {pembeli.nama}")
+                \n\t{alamat} -- {nama_pembeli}\
+                \n\t\t -- {status}")
 
             i += 1
 
 class Masker:
     jumlah_seluruh_masker = 0
     # default attribute/properties tiap2 masker -----------------------------
-    def __init__(self, nama, warna, harga, jumlah):
+    def __init__(self, nama, warna, harga, jumlah, kode):
         # identitas barang
         self.nama = nama
         self.warna = warna
         self.harga = harga
         self.jumlah = jumlah
+        self.kode = kode
         Masker.jumlah_seluruh_masker += 1
-        self.kode = f"ms{Masker.jumlah_seluruh_masker}"
 
     # method = fungsi yg cuma bisa dipake objek Masker -----------------------
     def tambah_stok(self, jumlah):
         con = sqlite3.connect("database.db")
         cur = con.cursor()
 
-        tambah = f'''UPDATE tabel_masker 
+        tambah = f"""UPDATE tabel_masker 
         SET jumlah = {self.jumlah + jumlah}
-        WHERE nama_masker = {self.nama}'''
+        WHERE kode = '{self.kode}'"""
 
         cur.execute(tambah)
         con.commit()
@@ -144,9 +150,9 @@ class Masker:
         con = sqlite3.connect("database.db")
         cur = con.cursor()
 
-        kurangi = f'''UPDATE tabel_masker 
+        kurangi = f"""UPDATE tabel_masker 
         SET jumlah = {self.jumlah - jumlah}
-        WHERE nama_masker = {self.nama}'''
+        WHERE nama_masker = '{self.nama}'"""
 
         cur.execute(kurangi)
         con.commit()
@@ -170,18 +176,6 @@ class Pembeli:
         self.nama = nama
         self.password = password
         self.list_pesanan = [pesanan for pesanan in akun_toko[0].list_pesanan if self.nama == pesanan[5]]
-    
-        con = sqlite3.connect("database.db")
-        cur = con.cursor()
-
-        tambah_akun = f'''INSERT INTO tabel_akun_pembeli
-            (nama, password) VALUES
-            ('{nama}', '{password}')'''
-
-        cur.execute(tambah_akun)
-        
-        con.commit()
-        con.close()
 
     # method = semua yg bisa dilakukan oleh si pembeli -----------------------
     
@@ -198,15 +192,20 @@ class Pembeli:
             no_pesanan = pesanan[1]
             nama_masker = pesanan[2]
             jumlah = pesanan[3]
-            pembeli = pesanan[5]
+            nama_pembeli = pesanan[5]
             total = pesanan[4]
             alamat = pesanan[6]
+            status = pesanan[7]
 
             print(f"({i}). {tanggal} -- {no_pesanan}\
                 \n\t{nama_masker} x {jumlah}\tRp{total}\
-                \n\t{alamat} -- {pembeli.nama}")
+                \n\tAlamat  : {alamat}\
+                \n\tPembeli : {nama_pembeli}\
+                \n\t\t -- {status}")
             i += 1
 
+    def update_pesanan(self):
+        self.list_pesanan = [pesanan for pesanan in akun_toko[0].list_pesanan if self.nama == pesanan[5]]
 
 # =========================================================
 #                           DATA
@@ -218,8 +217,6 @@ akun_toko = [
         password = "123"
     )
 ]
-
-daftar_masker = akun_toko[0].list_masker
 
 akun_pembeli = [
     Pembeli(
@@ -263,8 +260,9 @@ def password_benar(tipe_akun, nama, password):
 
 # return Boolean
 def masker_tersedia(nama):
-    for masker in daftar_masker:
-        if nama.casefold() in masker.nama.casefold():
+    for masker in akun_toko[0].list_masker:
+        if nama.casefold() in masker.nama.casefold() and nama.isspace() != True and nama != "" or\
+            nama.casefold() in masker.warna.casefold() and nama.isspace() != True and nama != "":
             return True
     else:
         return False
@@ -273,18 +271,18 @@ def masker_tersedia(nama):
 def masker_dipilih(nama):
     # cari nama yg berkaitan dgn yg dicari
     nama_ditemukan = []
-    for masker in daftar_masker:
+    for masker in akun_toko[0].list_masker:
         if nama.casefold() in masker.nama.casefold():
             nama_ditemukan.append(masker.nama)
 
     # list nama semua masker yg tersedia
-    list_nama_masker = [masker.nama for masker in daftar_masker]
+    list_nama_masker = [masker.nama for masker in akun_toko[0].list_masker]
     
     # cari masker2 yg ditemukan
     masker_ditemukan = []
     for nama_masker in nama_ditemukan:
         index = fibonacci_search(list_nama_masker, nama_masker)
-        masker_ditemukan.append(daftar_masker[index])
+        masker_ditemukan.append(akun_toko[0].list_masker[index])
 
     return masker_ditemukan
 
@@ -301,34 +299,29 @@ def jumlah_masuk_akal(jumlah):
 # sort n search ...........................................................
 # return int atau None
 def fibonacci_search(list_data, data):
-    size = len(list_data)
-     
-    start = -1
-     
-    f0 = 0
-    f1 = 1
-    f2 = 1
-    while(f2 < size):
-        f0 = f1
-        f1 = f2
-        f2 = f1 + f0
-     
-     
-    while(f2 > 1):
-        index = min(start + f0, size - 1)
-        if list_data[index] < data:
-            f2 = f1
-            f1 = f0
-            f0 = f2 - f1
-            start = index
-        elif list_data[index] > data:
-            f2 = f0
-            f1 = f1 - f0
-            f0 = f2 - f1
-        else:
-            return index
-    if (f1) and (list_data[size - 1] == data):
-        return size - 1
+    fibM_minus_2 = 0
+    fibM_minus_1 = 1
+    fibM = fibM_minus_1 + fibM_minus_2
+    while (fibM < len(list_data)):
+        fibM_minus_2 = fibM_minus_1
+        fibM_minus_1 = fibM
+        fibM = fibM_minus_1 + fibM_minus_2
+    index = -1;
+    while (fibM > 1):
+        i = min(index + fibM_minus_2, (len(list_data)-1))
+        if (list_data[i] < data):
+            fibM = fibM_minus_1
+            fibM_minus_1 = fibM_minus_2
+            fibM_minus_2 = fibM - fibM_minus_1
+            index = i
+        elif (list_data[i] > data):
+            fibM = fibM_minus_2
+            fibM_minus_1 = fibM_minus_1 - fibM_minus_2
+            fibM_minus_2 = fibM - fibM_minus_1
+        else :
+            return i
+    if(fibM_minus_1 and index < (len(list_data)-1) and list_data[index+1] == data):
+        return index+1
     return None
 
 def insertion_sort(list_data):
@@ -346,7 +339,7 @@ def insertion_sort(list_data):
 
 def sort_berdasarkan(kategori):
     if kategori == "harga":
-        list_harga = [masker.harga for masker in daftar_masker]
+        list_harga = [masker.harga for masker in akun_toko[0].list_masker]
         print(list_harga)
         insertion_sort(list_harga)
 
@@ -361,20 +354,20 @@ def sort_berdasarkan(kategori):
         return list_harga
 
     elif kategori == "nama":
-        list_nama = [masker.nama for masker in daftar_masker]
+        list_nama = [masker.nama for masker in akun_toko[0].list_masker]
         insertion_sort(list_nama)
 
         for nama in list_nama:
             index_nama = list_nama.index(nama)
 
-            for masker in daftar_masker:
+            for masker in akun_toko[0].list_masker:
                 if nama == masker.nama:
                     list_nama[index_nama] = masker
         
         return list_nama
 
     elif kategori == "warna":
-        list_warna = [masker.warna for masker in daftar_masker]
+        list_warna = [masker.warna for masker in akun_toko[0].list_masker]
         print(list_warna)
         insertion_sort(list_warna)
 
@@ -389,7 +382,7 @@ def sort_berdasarkan(kategori):
         return list_warna
     
     elif kategori == "stok":
-        list_stok = [masker.jumlah for masker in daftar_masker]
+        list_stok = [masker.jumlah for masker in akun_toko[0].list_masker]
         print(list_stok)
         insertion_sort(list_stok)
 
@@ -412,22 +405,25 @@ def hari_ini():
 
     return f"{tanggal}/{bulan}/{tahun}"
 
+char = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 0,
+    "a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
+    "k", "l", "m", "n", "o", "p", "q", "r", "s", "t",
+    "u", "v", "w", "x", "y", "z"
+]
 def nomor_pesanan(masker):
-    char = [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 0,
-        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
-        "k", "l", "m", "n", "o", "p", "q", "r", "s", "t",
-        "u", "v", "w", "x", "y", "z"
-    ]
-    no_pesanan = "FR" + masker.kode
+
+    no_pesanan = masker.kode
     for i in range(5):
         random_char = str(random.choice(char))
         no_pesanan += random_char
 
     return no_pesanan
 
+def kode_masker(nama, warna):
+    return f"ms{len(akun_toko[0].list_masker)+1}{warna[0]}"
 
-# decorating material
+# decorating material ......................................................
 def Palette_Warna(ColourCode="White", text="", fonteu="Reset"):
     ColourTupleA = ("Black","Red","Green","Orange","Blue","Purple","Cyan","White")
     ColourTupleB = ("Grey","LRed","LGreen","Yellow","LBlue","Pink","LCyan")
@@ -446,28 +442,31 @@ def printc(ColourCode, text, fonteu):
 
 
 # UPDATE PENYIMPANAN
-def update_toko(toko=akun_toko[0]):
+def update_toko():
     con = sqlite3.connect("database.db")
     cur = con.cursor()
 
     select_masker = f'''SELECT * FROM tabel_masker'''
     list_masker = list(cur.execute(select_masker))
 
-    toko.list_masker.clear()
+    akun_toko[0].list_masker.clear()
     for masker in list_masker:
-        for i in range(len(masker)):
-            toko.list_masker.append(
-                Masker(
-                    nama = masker[0],
-                    warna = masker[1],
-                    harga = masker[2],
-                    jumlah = masker[3]
-                )
+        akun_toko[0].list_masker.append(
+            Masker(
+                nama = masker[1],
+                warna = masker[2],
+                harga = masker[3],
+                jumlah = masker[4],
+                kode = kode_masker(masker[1], masker[2])
             )
+        )
 
     select_pesanan = f'''SELECT * FROM tabel_pesanan_penjual'''
     list_pesanan = list(cur.execute(select_pesanan))
-    toko.list_pesanan = list_pesanan
+    akun_toko[0].list_pesanan = list_pesanan
+
+    for pembeli in akun_pembeli:
+        pembeli.update_pesanan()
 
     con.commit()
     con.close()
@@ -475,10 +474,14 @@ def update_toko(toko=akun_toko[0]):
 def akun_pembali_baru(nama, password):
     global akun_pembeli
 
-    
     con = sqlite3.connect("database.db")
     cur = con.cursor()
-    akun_baru = Pembeli(nama, password)
+
+    tambah_akun = f'''INSERT INTO tabel_akun_pembeli
+            (nama, password) VALUES
+            ('{nama}', '{password}')'''
+
+    cur.execute(tambah_akun)
 
     select_akun = '''SELECT * FROM tabel_akun_pembeli'''
     list_akun = list(cur.execute(select_akun))
