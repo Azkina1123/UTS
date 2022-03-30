@@ -1,3 +1,4 @@
+from tkinter.font import BOLD
 from sistem import *
 
 # ==================================== LOGIN ====================================
@@ -185,13 +186,13 @@ def Menu_untuk_Pembeli(warning=""):
     clear()
     print(f""" 
     
-    {warning}
-    
+
     Berikut Opsi Interaktif Kami, {akun_now.nama}!!
-    [1] Lihat daftar seluruh barang
-    [2] Cari nama barang
-    [3] Daftar pesanan
-    [4] Keluar """)
+    ||   [1] Lihat daftar seluruh barang
+    ||   [2] Cari nama barang
+    ||   [3] Daftar pesanan
+    ||   [4] Keluar
+    {warning}""")
     #note: 1 --> barang dipisah berdasarkan nama masker
     #      2 --> search nama barang
     #      3 --> tanya di-sort berdasarkan apa --> 
@@ -210,7 +211,7 @@ def Menu_untuk_Pembeli(warning=""):
         Notif_berhasil(2)
         Menu_User()
     else:
-        Menu_untuk_Pembeli(warning="Opsi tidak tersedia!")
+        Menu_untuk_Pembeli(Palette_Warna("LRed","Opsi tidak tersedia!", "Bold"))
 
 def Menu_untuk_Penjual(warning=""):
     clear()
@@ -218,14 +219,14 @@ def Menu_untuk_Penjual(warning=""):
     print(
         f""" 
     
-        {warning}
+    {warning}
         
-        Berikut Opsi Interaktif Kami, {akun_now.nama}!!
-        [1] Lihat daftar seluruh masker 
-        [2] Cari masker
-        [3] Tambah Masker Jenis Baru
-        [4] Daftar pesanan masuk
-        [5] Keluar """
+    Berikut Opsi Interaktif Kami, {akun_now.nama}!!
+    ||   [1] Lihat daftar seluruh masker 
+    ||   [2] Cari masker
+    ||   [3] Tambah Masker Jenis Baru
+    ||   [4] Daftar pesanan masuk
+    ||   [5] Keluar """
     )
 
     Respon_menu_user = input("\n\t\t>> ")
@@ -258,12 +259,12 @@ def menu_sorting(warning=""):
     {warning}
 
     Pilih metode pengurutan barang:
-    [1] Berdasarkan Nama
-    [2] Berdasarkan Warna
-    [3] Berdasarkan Ketersediaan / Stok
-    [4] Berdasarkan Harga Terendah
-    [5] Berdasarkan Harga Tertinggi
-    [6] Kembali""")
+    ||   [1] Berdasarkan Nama
+    ||   [2] Berdasarkan Warna
+    ||   [3] Berdasarkan Ketersediaan / Stok
+    ||   [4] Berdasarkan Harga Terendah
+    ||   [5] Berdasarkan Harga Tertinggi
+    ||   [6] Kembali""")
     kategori = input("\n\t>> ")
 
     # kondisi
