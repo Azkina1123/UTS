@@ -89,7 +89,6 @@ def Login_Pembeli(warning="                                          "):
 
         # kalau mau login
         if Respon_menu_user == "1":
-
             # verif nama & pass
             if nama_sudah_ada(akun_pembeli, nama) \
                 and password_benar(akun_pembeli, nama, password):
@@ -107,14 +106,16 @@ def Login_Pembeli(warning="                                          "):
         
         # kalau mau sign up
         elif Respon_menu_user == "2":
-
+            print([akun.nama for akun in akun_pembeli])
+            print([akun.password for akun in akun_pembeli])
+            input()
             #Verifikasi apakah nama sudah tersedia atau belum
             if nama_sudah_ada(akun_pembeli, nama):
                 Login_Pembeli(Palette_Warna("LRed","              Gagal Sign up!              ","Bold"))
 
             else:
                 # buat akun. masukkan ke list akun_pembeli di sistem
-                akun_pembali_baru(
+                akun_pembeli_baru(
                     nama = nama,
                     password = password
                 )
@@ -333,10 +334,10 @@ def menu_searching(menu_back, warning=""):
     printc("White","","Bold")
 
     # masker yg dicari ada
-    if masker_tersedia(Barang_dituju):
+    masker_ditemukan = masker_tersedia(Barang_dituju)
+    if len(masker_ditemukan) != 0:
 
         # tampilkan masker
-        masker_ditemukan = masker_dipilih(Barang_dituju)
         tampilkan_daftar_masker(
             subjudul = f"Hasil pencarian '{Barang_dituju}':",
             list_masker = masker_ditemukan
@@ -347,7 +348,7 @@ def menu_searching(menu_back, warning=""):
 
         #timed cls 1s
         for i in range(3,0,-1):
-            print(f"\n\n \t\tBarang tidak ditemukan atau sedang tidak tersedia ({i}s)")
+            print(f"\n\n\t\tBarang tidak ditemukan atau sedang tidak tersedia ({i}s)")
         menu_back("Masker tidak ditemukan!")
 
 # tampilan daftar masker
@@ -673,8 +674,6 @@ def edit_masker(masker, warning=""):
             jumlah = int(input("Jumlah\t: "))
 
             if jumlah_masuk_akal(jumlah):
-                print(masker.kode)
-                input()
                 akun_now.restok_masker(
                     mode = "tambah",
                     kode = masker.kode,

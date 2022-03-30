@@ -64,13 +64,10 @@ class Toko:
 
         select_data = """SELECT * FROM tabel_masker"""
         list_masker = list(cur.execute(select_data))
-        print(list_masker)
-        input("=====================")
 
         for masker in list_masker:
             if masker[0] == kode:
                 if mode == "tambah":
-                    input("Masukk?????")
                     tambah = f"""UPDATE tabel_masker 
                     SET jumlah = {masker[4] + jumlah}
                     WHERE kode = '{kode}'"""
@@ -284,40 +281,34 @@ def tclear(sec):
     clear()
 
 # return Boolean
-def nama_sudah_ada(list_akun, nama):
-    list_nama = [akun.nama for akun in list_akun]
-    if nama in list_nama:
-        return True
-    else:
-        return False
-
-# return Boolean
-def password_benar(list_akun, nama, password):
-    list_nama = [akun.nama for akun in list_akun]
-    list_pw = [akun.password for akun in list_akun]
-
-    if password in list_pw:
-        if list_pw.index(password) == list_nama.index(nama):
+def nama_sudah_ada(tipe_akun, nama):
+    for akun in tipe_akun:
+        if akun.nama == nama:
             return True
-        else:
-            return False
-    else:
-        return False
+    else: return False
 
 # return Boolean
-def masker_tersedia(nama):
-    index = interpolation_search(
-        list_data=[akun_toko[0].list_masker],
-        data = nama
-    )
+def password_benar(tipe_akun, nama, password):
+    for akun in tipe_akun:
+        if akun.nama == nama:
+            if akun.password == password:
+                return True
+    else: return False
 
-    if index is not None:
-        return True
-    else:
-        return False
+# return Boolean
+# def masker_tersedia(nama):
+#     index = interpolation_search(
+#         list_data=[akun_toko[0].list_masker],
+#         data = nama
+#     )
+
+#     if index is not None:
+#         return True
+#     else:
+#         return False
 
 # return Masker
-def masker_dipilih(nama):
+def masker_tersedia(nama):
     # cari nama yg berkaitan dgn yg dicari
     list_nama = [
         masker.nama for masker in akun_toko[0].list_masker\
@@ -356,6 +347,7 @@ def jumlah_masuk_akal(jumlah):
 # sort n search ...........................................................
 # return int atau None
 def interpolation_search(list_data, data):
+    
     insertion_sort(list_data)
 
     index = -1
@@ -551,7 +543,7 @@ def update_pembeli():
         akun_pembeli.append(
             Pembeli(
                 nama = nama,
-                password= password
+                password = password
             )
         )
 
@@ -559,7 +551,7 @@ def update_pembeli():
     con.close()
 
 # buat akun baru
-def akun_pembali_baru(nama, password):
+def akun_pembeli_baru(nama, password):
     con = sqlite3.connect("database.db")
     cur = con.cursor()
 
@@ -569,10 +561,10 @@ def akun_pembali_baru(nama, password):
 
     cur.execute(tambah_akun)
 
-    update_pembeli()
-
     con.commit()
     con.close()
+
+    update_pembeli()
 
 def sinkronisasi_data():
     update_toko()
