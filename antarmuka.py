@@ -59,19 +59,25 @@ def Notif_berhasil(path):
         note = Palette_Warna("LRed","!Menutup Program!","Bold")
         noteX = (f"            {note}             ")
     
+    for i in range (6):
+        if i == 0 or i == 3 or i == 6:
+            wait = "         mohon tunggu sebentar.           "
+        elif i == 1 or i == 4:
+            wait = "         mohon tunggu sebentar..          "
+        elif i == 2 or i == 5:
+            wait = "         mohon tunggu sebentar...         "
 
-
-    print(f"""\n\n\n\n\n
+        print(f"""\n\n\n\n\n
 \t\tO                                          O
 \t\t:                                          :
 \t\t:{lightbulbX}:
 \t\t:__________________________________________:
 \t\t|'                                        '|
 \t\t|{noteX}|
-\t\t|         mohon tunggu sebentar...         |
+\t\t|{wait}|
 \t\t|                                          |
 \t\t \________________________________________/""")
-    tclear(2)
+        tclear(0.25)
 
 
 
@@ -550,13 +556,17 @@ def transaksi_pesanan(subjudul, list_masker, warning=""):
 
 def menu_tambah_masker(warning=""):
     clear()
-    print("\tTambahkan Masker Baru")
-    print(f"\t\n{warning}\n")
-    print("Ketik '//' untuk membatalkan aktivitas\n")
+    print("""\n\n\n\n 
+    
+
+
+\t\t    ▓ Tambahkan Masker Baru""")
+    print(f"\t\t    |\n\t\t    ▓ {warning}\n\t\t    |")
+    print("\t\t    ▓ Ketik '//' untuk membatalkan aktivitas\n\t\t    |")
 
     form = ["Nama masker", "Warna", "Harga", "Jumlah"]
     for i in range(len(form)):
-        answer = input(f"\t{form[i].ljust(15)}: ")
+        answer = input(f"\t\t    ▓ {form[i].ljust(15)}: ")
 
         if answer == "//":
             Menu_untuk_Penjual(Palette_Warna("Cyan","Aktivitas dibatalkan.","Bold"))
@@ -651,7 +661,7 @@ def pilih_masker(subjudul, list_masker, warning=""):
     
     # ubah masker
     if respon == "1":
-        kode_masker = input("Kode masker : ")
+        kode_masker = input("\n\t\t\tKode masker : ")
         clear()
 
         # cek masker
@@ -694,17 +704,17 @@ def pilih_masker(subjudul, list_masker, warning=""):
 def edit_masker(masker, warning=""):
     clear()
 
-    print("\n\n")
+    print("\n\n\n\n\n\n\t\t"+"██████████████████████████████"*2)
     masker.tampilkan_data()
+    print("\t\t"+"██████████████████████████████"*2)
 
-    print(f""" 
-
-    {warning}
-    
-    [1] Tambah stok masker
-    [2] Kurangi stok masker
-    [3] Hapus masker
-    [4] Kembali """)
+    print(f"""\n
+\t\t\tBerikut opsi edit yang tersedia:
+\t\t\t||   [1] Tambah stok masker
+\t\t\t||   [2] Kurangi stok masker
+\t\t\t||   [3] Hapus masker
+\t\t\t||   [4] Kembali
+\t\t\t{warning}""")
 
     Respon_menu_user = input("\n\t\t>> ")
     print()
