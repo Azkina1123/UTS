@@ -221,7 +221,13 @@ def Menu_untuk_Pembeli(warning=""):
         Notif_berhasil(2)
         Menu_User()
     else:
-        Menu_untuk_Pembeli(Palette_Warna("LRed","Opsi tidak tersedia!", "Bold"))
+        Menu_untuk_Pembeli(
+            Palette_Warna(
+            "LRed",
+            "Opsi tidak tersedia!", 
+            "Bold"
+            )
+        )
 
 def Menu_untuk_Penjual(warning=""):
     clear()
@@ -253,7 +259,13 @@ def Menu_untuk_Penjual(warning=""):
         Notif_berhasil(2)
         Menu_User()
     else:
-        Menu_untuk_Pembeli(Palette_Warna("LRed","Opsi tidak tersedia!", "Bold"))
+        Menu_untuk_Pembeli(
+            Palette_Warna(
+                "LRed",
+                "Opsi tidak tersedia!", 
+                "Bold"
+            )
+        )
 
 
 # = = = = = = = = = = = = = = = = = MENU YANG SAMA = = = = = = = = = = = = = = = = = = 
@@ -549,20 +561,36 @@ def menu_pesanan_penjual(warning=""):
         # jika benar-benar membeli
         if respon == "1":
             no_pesanan = input("Nomor pesanan\t:")
-
             list_no_pesanan = [pesanan[1] for pesanan in akun_now.list_pesanan]
 
             if no_pesanan in list_no_pesanan:
                 index = list_no_pesanan.index(no_pesanan)
-                if akun_now.list_pesanan[index][7] == Palette_Warna("Cyan","sudah dikirim","Bold"):
-                    menu_pesanan_penjual(warning=Palette_Warna("LRed","Pesanan telah dikirim sebelumnya!","Bold"))
+
+                if akun_now.list_pesanan[index][7] == Palette_Warna(
+                    "Cyan", 
+                    "sudah dikirim",
+                    "Bold"
+                ):
+                    menu_pesanan_penjual(
+                        warning = Palette_Warna(
+                            "LRed",
+                            "Pesanan telah dikirim sebelumnya!",
+                            "Bold"
+                        )
+                    )
                 else:
                     akun_now.kirim_masker(
                         no_pesanan = no_pesanan
                     )
                     printc("LGreen",f"\nPesanan {no_pesanan} telah berhasil dikirim!",)
             else:
-                menu_pesanan_penjual(warning=Palette_Warna("LRed","Nomor pesanan tidak ditemukan!","Bold"))
+                menu_pesanan_penjual(
+                    warning = Palette_Warna(
+                        "LRed",
+                        "Nomor pesanan tidak ditemukan!",
+                        "Bold"
+                    )
+                )
 
         input("\n\n\t\tKembali =>")
         Menu_untuk_Penjual()
@@ -615,7 +643,7 @@ def pilih_masker(subjudul, list_masker, warning=""):
         tampilkan_daftar_masker(
             subjudul, 
             list_masker,
-            warning = Palette_Warna("LRed","Opsi tidak tersedia!","Bold")
+            warning = Palette_Warna("LRed", "Opsi tidak tersedia!", "Bold")
         )
 
 # menu manipulasi stok masker

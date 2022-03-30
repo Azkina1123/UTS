@@ -148,6 +148,11 @@ class Toko:
             nama_pembeli = pesanan[5]
             alamat = pesanan[6]
             status = pesanan[7]
+
+            if status == "belum dikirim":
+                status = Palette_Warna("Yellow", "belum dikirim")
+            else:
+                pass
             
             print(f"({i}). {tanggal} -- {no_pesanan}\
                 \n\t{nama_masker} x {jumlah}\tRp{total}\
