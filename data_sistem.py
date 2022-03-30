@@ -110,13 +110,13 @@ class Toko:
         con.close()
 
     def kirim_pesanan(self, no_pesanan, jumlah):
-        index_pesanan = fibonacci_search(
+        index_pesanan = interpolation_search(
             list_data = [pesanan[1] for pesanan in self.list_pesanan],
             data = no_pesanan
         )
 
         nama_masker = self.list_pesanan[index_pesanan][2]
-        index_masker = fibonacci_search(
+        index_masker = interpolation_search(
             list_data = [masker.nama for masker in self.list_masker],
             data = nama_masker
         )

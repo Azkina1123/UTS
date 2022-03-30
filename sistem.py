@@ -204,11 +204,11 @@ class Masker:
 
     def tampilkan_data(self):
         print(
-            f"[{self.kode.center(30)}]\
-            \nNama\t: {self.nama}\
-            \nWarna\t: {self.warna}\
-            \nHarga\t: Rp{self.harga}\
-            \nStok\t: {self.jumlah}"
+            f"\t\t\t   [{self.kode.center(30)}]\
+            \n\t\t\tNama\t: {self.nama}\
+            \n\t\t\tWarna\t: {self.warna}\
+            \n\t\t\tHarga\t: Rp{self.harga}\
+            \n\t\t\tStok\t: {self.jumlah}"
         )
 
 class Pembeli:
