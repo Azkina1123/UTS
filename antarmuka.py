@@ -3,6 +3,31 @@ from sistem import *
 
 # ==================================== LOGIN ====================================
 
+#Pintu Exit
+def Persetujuan_Exit(warning="                                          "):
+    clear()
+
+    print(f"""\n\n\n\n\n
+\t\tO                                          O
+\t\t:                                          :
+\t\t:                  [---]                   :
+\t\t:__________________________________________:
+\t\t|'                                        '|
+\t\t|      Apakah Anda yakin ingin keluar?     |
+\t\t|{warning}|
+\t\t|       [1] Ya            [2] Tidak        |
+\t\t \________________________________________/""")
+
+    Respon_Menu_User = input("\t\t\t\t  >> ")
+    if Respon_Menu_User == "1":
+        Notif_berhasil(4)
+        quit()
+    elif Respon_Menu_User == "2":
+        Menu_User()
+    else:
+        Persetujuan_Exit(Palette_Warna("LRed","           Menu tidak tersedia            ","Bold"))
+
+
 #Notifikasi Keberhasilan
 def Notif_berhasil(path):
     clear()
@@ -20,11 +45,19 @@ def Notif_berhasil(path):
         note = Palette_Warna("LGreen","!Berhasil Log out!","Bold")
         noteX = (f"            {note}            ")
 
+    # Jalur 3: text untuk penyusup
     elif path == 3:
         lightbulb = Palette_Warna("LRed","•••","Bold")
         lightbulbX = (f"                  [{lightbulb}]                   ")
         note = Palette_Warna("LRed","Login Penjual Gagal, Mengeluarkan Paksa","Bold")
         noteX = (f" {note}  ")
+
+    # Jalur 4: text untuk keluar program
+    elif path == 4:
+        lightbulb = Palette_Warna("Yellow","•••","Bold")
+        lightbulbX = (f"                  [{lightbulb}]                   ")
+        note = Palette_Warna("LRed","!Menutup Program!","Bold")
+        noteX = (f"            {note}             ")
     
 
 
@@ -184,14 +217,15 @@ def Menu_User(warning="                                          "):
 \t\t|      Masuk ke dalam program sebagai:     |
 \t\t|    [1] Pembeli            [2] Penjual    |
 \t\t \________________________________________/""")
+    printc("Grey","\t\t    Ketik '//' untuk keluar dari program.",)
 
-
-    Respon_Menu_User = input("\n\t\t\t\t  >> ")
+    Respon_Menu_User = input("\t\t\t\t  >> ")
     if Respon_Menu_User == "1":
         Login_Pembeli()
     elif Respon_Menu_User == "2":
-        #cls
         Login_Penjual()
+    elif Respon_Menu_User == "//":
+        Persetujuan_Exit()
     else:
         Menu_User(Palette_Warna("LRed","           Menu tidak tersedia            ","Bold"))
 
@@ -200,7 +234,7 @@ def Menu_untuk_Pembeli(warning=""):
     print(f"""\n\n\n\n 
  
 
-\t\t    Berikut Opsi Interaktif Kami, {akun_now.nama}!!
+\t\t    Berikut Opsi Interaktif Kami, {Palette_Warna("LBlue",akun_now.nama,"Bold")}!!
 \t\t    ||   [1] Lihat daftar seluruh barang
 \t\t    ||   [2] Cari nama barang
 \t\t    ||   [3] Daftar pesanan
@@ -239,7 +273,7 @@ def Menu_untuk_Penjual(warning=""):
     
 
 
-\t\t    Berikut Opsi Interaktif Kami, {akun_now.nama}!!
+\t\t    Berikut Opsi Interaktif Kami, {Palette_Warna("LBlue",akun_now.nama,"Bold")}!!
 \t\t    ||   [1] Lihat daftar seluruh masker 
 \t\t    ||   [2] Cari masker
 \t\t    ||   [3] Tambah Masker Jenis Baru
@@ -348,8 +382,15 @@ def menu_searching(menu_back, warning=""):
 
         #timed cls 1s
         for i in range(3,0,-1):
-            print(f"\n\n\t\tBarang tidak ditemukan atau sedang tidak tersedia ({i}s)")
-        menu_back("Masker tidak ditemukan!")
+            clear()
+            print(f"\n\n\n\n\n\n\t{warning}")
+            printc("Grey","\t\t\t _____________________",)
+            print(f"\n\t\t\t▒\033[4;37m Cari masker: {Barang_dituju}")
+            printc("White","","Bold")
+
+            print(f"\n\n\t\t\t\tBarang tidak ditemukan atau sedang tidak tersedia ({i}s)")
+            tclear(1)
+        menu_back(Palette_Warna("LRed","Masker tidak ditemukan!","Bold"))
 
 # tampilan daftar masker
 def tampilkan_daftar_masker(subjudul, list_masker, warning=""):
