@@ -279,46 +279,61 @@ def tclear(sec):
     clear()
 
 # return Boolean
-def nama_sudah_ada(tipe_akun, nama):
-    for akun in tipe_akun:
-        if akun.nama == nama:
-            return True
+def nama_sudah_ada(list_akun, nama):
+    list_nama = [akun.nama for akun in list_akun]
+    if nama in list_nama:
+        return True
     else:
         return False
 
 # return Boolean
-def password_benar(tipe_akun, nama, password):
-    for akun in tipe_akun:
-        if akun.nama == nama:
-            if akun.password == password:
-                return True
+def password_benar(list_akun, nama, password):
+    list_nama = [akun.nama for akun in list_akun]
+    list_pw = [akun.password for akun in list_akun]
+
+    if password in list_pw:
+        if list_pw.index(password) == list_nama.index(nama):
+            return True
+        else:
+            return False
     else:
         return False
 
 # return Boolean
 def masker_tersedia(nama):
-    for masker in akun_toko[0].list_masker:
-        if nama.casefold() in masker.nama.casefold() and nama.isspace() != True and nama != "" or\
-            nama.casefold() in masker.warna.casefold() and nama.isspace() != True and nama != "":
-            return True
+    index = interpolation_search(
+        list_data=[akun_toko[0].list_masker],
+        data = nama
+    )
+
+    if index is not None:
+        return True
     else:
         return False
 
 # return Masker
 def masker_dipilih(nama):
     # cari nama yg berkaitan dgn yg dicari
-    nama_ditemukan = []
-    for masker in akun_toko[0].list_masker:
-        if nama.casefold() in masker.nama.casefold():
-            nama_ditemukan.append(masker.nama)
+    list_nama = [
+        masker.nama for masker in akun_toko[0].list_masker\
+            if nama.casefold() in masker.nama.casefold()
+    ]
+    list_warna = [
+        masker.warna for masker in akun_toko[0].list_masker\
+            if nama.casefold() == masker.warna.casefold()
+    ]
 
-    # list nama semua masker yg tersedia
-    list_nama_masker = [masker.nama for masker in akun_toko[0].list_masker]
+    # gabung
+    list_nama.extend(list_warna)
     
     # cari masker2 yg ditemukan
     masker_ditemukan = []
-    for nama_masker in nama_ditemukan:
-        index = fibonacci_search(list_nama_masker, nama_masker)
+    for input in list_nama:
+        index = interpolation_search(
+            list_data = list_nama, 
+            data = input
+        )
+        
         masker_ditemukan.append(akun_toko[0].list_masker[index])
 
     return masker_ditemukan
@@ -335,31 +350,34 @@ def jumlah_masuk_akal(jumlah):
 
 # sort n search ...........................................................
 # return int atau None
-def fibonacci_search(list_data, data):
-    fibM_minus_2 = 0
-    fibM_minus_1 = 1
-    fibM = fibM_minus_1 + fibM_minus_2
-    while (fibM < len(list_data)):
-        fibM_minus_2 = fibM_minus_1
-        fibM_minus_1 = fibM
-        fibM = fibM_minus_1 + fibM_minus_2
-    index = -1;
-    while (fibM > 1):
-        i = min(index + fibM_minus_2, (len(list_data)-1))
-        if (list_data[i] < data):
-            fibM = fibM_minus_1
-            fibM_minus_1 = fibM_minus_2
-            fibM_minus_2 = fibM - fibM_minus_1
-            index = i
-        elif (list_data[i] > data):
-            fibM = fibM_minus_2
-            fibM_minus_1 = fibM_minus_1 - fibM_minus_2
-            fibM_minus_2 = fibM - fibM_minus_1
-        else :
-            return i
-    if(fibM_minus_1 and index < (len(list_data)-1) and list_data[index+1] == data):
-        return index+1
-    return None
+def interpolation_search(list_data, data):
+    insertion_sort(list_data)
+
+    index = -1
+    min = 0
+    max = len(list_data)-1
+
+    while list_data[min] < data and list_data[max] > data:
+        mid = (data - list_data[min]) // (list_data[max] - list_data[min]) * (max - min) + min
+
+        if list_data[mid] < data:
+            min = mid + 1
+        elif list_data[mid] > data:
+            max = mid - 1
+        else:
+            index = mid
+            break
+
+    if list_data[min] == data:
+        index = min
+    elif list_data[max] == data:
+        index = max
+
+    if index == -1:
+        print("\nData tidak ditemukan.")
+    else:
+        index = list_data.index(list_data[index])
+        return index
 
 def insertion_sort(list_data):
 
@@ -481,7 +499,8 @@ def inputc(ColourCode, text, fonteu):
 
 
 
-# UPDATE PENYIMPANAN
+# UPDATE PENYIMPANAN ====================================================
+# download data dari database
 def update_toko():
     con = sqlite3.connect("database.db")
     cur = con.cursor()
@@ -511,22 +530,17 @@ def update_toko():
     con.commit()
     con.close()
 
-def akun_pembali_baru(nama, password):
+# download data dari database
+def update_pembeli():
     global akun_pembeli
 
     con = sqlite3.connect("database.db")
     cur = con.cursor()
 
-    tambah_akun = f'''INSERT INTO tabel_akun_pembeli
-            (nama, password) VALUES
-            ('{nama}', '{password}')'''
-
-    cur.execute(tambah_akun)
-
-    select_akun = '''SELECT * FROM tabel_akun_pembeli'''
+    select_akun = """SELECT * FROM tabel_akun_pembeli"""
     list_akun = list(cur.execute(select_akun))
-
-    akun_pembeli = []
+    
+    akun_pembeli.clear()
     for akun in list_akun:
         nama, password = akun
         akun_pembeli.append(
@@ -539,5 +553,26 @@ def akun_pembali_baru(nama, password):
     con.commit()
     con.close()
 
+# buat akun baru
+def akun_pembali_baru(nama, password):
+    con = sqlite3.connect("database.db")
+    cur = con.cursor()
 
-    
+    tambah_akun = f"""INSERT INTO tabel_akun_pembeli
+                    (nama, password) VALUES
+                    ('{nama}', '{password}')"""
+
+    cur.execute(tambah_akun)
+
+    update_pembeli()
+
+    con.commit()
+    con.close()
+
+def sinkronisasi_data():
+    update_toko()
+    update_pembeli()
+
+
+# akun_pembali_baru("bebek","uenak")
+# print(akun_pembeli, f"\n\n\t{len(akun_pembeli)}")

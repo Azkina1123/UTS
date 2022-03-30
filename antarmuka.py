@@ -88,8 +88,10 @@ def Login_Pembeli(warning="                                          "):
 
         # kalau mau login
         if Respon_menu_user == "1":
-            #Verifikasi nama+pass / pembatalan pilihan --> 
-            if nama_sudah_ada(akun_pembeli, nama) and password_benar(akun_pembeli, nama, password):
+
+            # verif nama & pass
+            if nama_sudah_ada(akun_pembeli, nama) \
+                and password_benar(akun_pembeli, nama, password):
 
                 # berhasil masuk, sekarang di akun si yg namanya diinput tadi
                 akun_now = [pembeli for pembeli in akun_pembeli if pembeli.nama == nama]
@@ -132,7 +134,7 @@ def Login_Penjual(warning=""):
     # login
     form = ["Nama", "Password"]
     for i in range(len(form)):
-        print(f"\t\t▓\t\033[0;92;40m{form[i].ljust(10)}: \033[0;37;40m", end="")
+        print(f"\t\t▓\t\033[0;92;40m{form[i].ljust(10)}: \033[0m", end="")
         answer = input("")
 
         if answer == "//":
@@ -407,7 +409,7 @@ def transaksi_pesanan(subjudul, list_masker, warning=""):
         kode_masker = input("\n\tKode masker\t: ")
 
         # cek kode ada atau tidak
-        index_masker = fibonacci_search(
+        index_masker = interpolation_search(
             list_data = [masker.kode for masker in akun_toko[0].list_masker],
             data = kode_masker
         )
@@ -581,7 +583,7 @@ def pilih_masker(subjudul, list_masker, warning=""):
         clear()
 
         # cek masker
-        index_masker = fibonacci_search(
+        index_masker = interpolation_search(
             list_data = [masker.kode for masker in akun_toko[0].list_masker],
             data = kode_masker
         )
@@ -709,5 +711,5 @@ def edit_masker(masker, warning=""):
 
 if __name__ == "__main__":
     while True:
-        update_toko()
+        sinkronisasi_data()
         Menu_User()

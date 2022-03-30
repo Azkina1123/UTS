@@ -29,5 +29,34 @@ def fibonacci_search(lst, target):
         return size - 1
     return None
 
-a = ["bebek", "Ayam", "Gorila", "Angsa"]
-print(fibonacci_search(a, "Gorila"))
+a = ["beb3k", "Ay4m", "G0rila", "Angs4"]
+print(fibonacci_search(a, "G0rila"))
+
+b = ["ms4P", "ms0A"]
+print(fibonacci_search(b, "ms0A"))
+
+def fibonacci_search(list_data, data):
+    fibM_minus_2 = 0
+    fibM_minus_1 = 1
+    fibM = fibM_minus_1 + fibM_minus_2
+    while (fibM < len(list_data)):
+        fibM_minus_2 = fibM_minus_1
+        fibM_minus_1 = fibM
+        fibM = fibM_minus_1 + fibM_minus_2
+    index = -1;
+    while (fibM > 1):
+        i = min(index + fibM_minus_2, (len(list_data)-1))
+        if (list_data[i] < data):
+            fibM = fibM_minus_1
+            fibM_minus_1 = fibM_minus_2
+            fibM_minus_2 = fibM - fibM_minus_1
+            index = i
+        elif (list_data[i] > data):
+            fibM = fibM_minus_2
+            fibM_minus_1 = fibM_minus_1 - fibM_minus_2
+            fibM_minus_2 = fibM - fibM_minus_1
+        else :
+            return i
+    if(fibM_minus_1 and index < (len(list_data)-1) and list_data[index+1] == data):
+        return index+1
+    return None
