@@ -134,7 +134,7 @@ def Login_Penjual(warning=""):
     # login
     form = ["Nama", "Password"]
     for i in range(len(form)):
-        print(f"\t\t▓\t\033[0;92;40m{form[i].ljust(10)}: \033[0m", end="")
+        print(f"\t\t▓\t\033[0;92m{form[i].ljust(10)}: \033[0m", end="")
         answer = input("")
 
         if answer == "//":
@@ -315,7 +315,7 @@ def menu_searching(menu_back, warning=""):
     clear()
     print(f"\t{warning}")
     printc("Grey","\t\t\t _____________________",)
-    Barang_dituju = input("\n\t\t\t▒\033[4;37;40m Cari masker: ")
+    Barang_dituju = input("\n\t\t\t▒\033[4;37m Cari masker: ")
     printc("White","","Bold")
 
     # masker yg dicari ada
