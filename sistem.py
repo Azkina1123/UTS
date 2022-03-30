@@ -1,6 +1,6 @@
 # TEMPATNYA FUNGSI-FUNGSI DAN PENYIMPANAN
 
-from curses.ascii import isspace
+#from curses.ascii import isspace
 import os
 from select import select
 import time
@@ -475,6 +475,9 @@ def Palette_Warna(ColourCode="White", text="", fonteu="Reset"):
 
 def printc(ColourCode, text, fonteu):
     print(Palette_Warna(ColourCode, text, fonteu))
+
+def inputc(ColourCode, text, fonteu):
+    return input(f"{Palette_Warna(ColourCode, text, fonteu)}")
 
 
 

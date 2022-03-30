@@ -3,18 +3,36 @@ from sistem import *
 # ==================================== LOGIN ====================================
 
 #Notifikasi Keberhasilan
-def Notif_berhasil_login():
+def Notif_berhasil(path):
+    clear()
+
+    # Jalur 1: text untuk login
+    if path == 1:
+        lightbulb = Palette_Warna("Green","•••","Bold")
+        lightbulbX = (f"                  [{lightbulb}]                   ")
+        note = Palette_Warna("LGreen","!LOGIN ANDA BERHASIL!","Bold")
+        noteX = (f"           {note}          ")
+
+    # Jalur 2: text untuk log out
+    elif path == 2:
+        lightbulbX = (f"                  [---]                   ")
+        note = Palette_Warna("LGreen","!Berhasil Log out!","Bold")
+        noteX = (f"            {note}            ")
+    
+
+
     print(f"""\n\n\n\n\n
-O                                          O
-:                                          :
-:                  [{Palette_Warna("Green","•••","Bold")}]                   :
-:__________________________________________:
-|'                                        '|
-|           {Palette_Warna("LGreen","!LOGIN ANDA BERHASIL!","Bold")}          |
-|         mohon tunggu sebentar...         |
-|                                          |
- \________________________________________/""")
+\t\tO                                          O
+\t\t:                                          :
+\t\t:{lightbulbX}:
+\t\t:__________________________________________:
+\t\t|'                                        '|
+\t\t|{noteX}|
+\t\t|         mohon tunggu sebentar...         |
+\t\t|                                          |
+\t\t \________________________________________/""")
     tclear(2)
+
 
 akun_now = akun_toko[0]
 def Login_Pembeli(warning="                                          "):
@@ -22,18 +40,18 @@ def Login_Pembeli(warning="                                          "):
 
     clear()
     print(f"""\n\n\n\n\n
-O                                          O
-:                                          :
-:                  [{Palette_Warna("Green","••","Bold")}-]                   :
-:__________________________________________:
-|'                                        '|
-|           -Pilih metode masuk-           |
-|{warning}|
-|  [1] Login   [2] Sign-up   [3] Kembali   |
- \________________________________________/""")
+\t\tO                                          O
+\t\t:                                          :
+\t\t:                  [{Palette_Warna("Green","••","Bold")}-]                   :
+\t\t:__________________________________________:
+\t\t|'                                        '|
+\t\t|           -Pilih metode masuk-           |
+\t\t|{warning}|
+\t\t|  [1] Login   [2] Sign-up   [3] Kembali   |
+\t\t \________________________________________/""")
 
     # masukkan opsi
-    Respon_menu_user = input("\n\t\t  >> ")
+    Respon_menu_user = input("\n\t\t\t\t  >> ")
 
     # opsi tidak tersedia
     if Respon_menu_user not in ("1", "2", "3"):
@@ -46,12 +64,12 @@ O                                          O
     # login atau sign up
     else:
         print()
-        print("\tKetik '//' untuk membatalkan.\n")
+        print("\t\t\tKetik '//' untuk membatalkan.\n")
 
         # isi nama dan password, semoga paham :>
         form = ["Nama", "Password"]
         for i in range(len(form)):
-            print(f"\t{form[i].ljust(10)}: ", end="")
+            print(f"\t\t\t{form[i].ljust(10)}: ", end="")
             answer = input("")
 
             if answer == "//":
@@ -71,7 +89,7 @@ O                                          O
                 akun_now = akun_now[0]
 
                 # masuk menu
-                Notif_berhasil_login()
+                Notif_berhasil(1)
                 Menu_untuk_Pembeli()
 
             else:
@@ -100,13 +118,13 @@ def Login_Penjual(warning=""):
     print("\n\n\n\n\n")
     print(warning.center(30))
     print("""
-    <Konfirmasi Identitas> 
-    Ketik // untuk membatalkan.\n""")
+\t\t    <Konfirmasi Identitas> 
+\t\t    Ketik // untuk membatalkan.\n""")
     
     # login
     form = ["Nama", "Password"]
     for i in range(len(form)):
-        print(f"\t{form[i].ljust(10)}: ", end="")
+        print(f"\033[0;92;40m\t\t\t{form[i].ljust(10)}: \033[0;37;40m", end="")
         answer = input("")
 
         if answer == "//":
@@ -139,32 +157,29 @@ def Login_Penjual(warning=""):
 # ===================================== MENU ======================================
 
 # Menu?
-def Menu_User():
+def Menu_User(warning="                                          "):
     clear()
 
     print(f"""\n\n\n\n\n
-O                                          O
-:                                          :
-:                  [{Palette_Warna("Green","•","Bold")}--]                   :
-:__________________________________________:
-|'            !Selamat Datang!            '|
-|                                          |
-|      Masuk ke dalam program sebagai:     |
-|    [1] Pembeli            [2] Penjual    |
- \________________________________________/""")
+\t\tO                                          O
+\t\t:                                          :
+\t\t:                  [{Palette_Warna("Green","•","Bold")}--]                   :
+\t\t:__________________________________________:
+\t\t|'            !Selamat Datang!            '|
+\t\t|{warning}|
+\t\t|      Masuk ke dalam program sebagai:     |
+\t\t|    [1] Pembeli            [2] Penjual    |
+\t\t \________________________________________/""")
 
 
-    Respon_Menu_User = input("\n\t\t  >> ")
+    Respon_Menu_User = input("\n\t\t\t\t  >> ")
     if Respon_Menu_User == "1":
-        #cls
         Login_Pembeli()
     elif Respon_Menu_User == "2":
         #cls
         Login_Penjual()
     else:
-        printc ("LRed",f"\t  Menu < {Respon_Menu_User} > tidak tersedia","Bold")
-        tclear(2)
-        Menu_User()
+        Menu_User(Palette_Warna("LRed","           Menu tidak tersedia            ","Bold"))
 
 def Menu_untuk_Pembeli(warning=""):
     clear()
@@ -192,7 +207,7 @@ def Menu_untuk_Pembeli(warning=""):
     elif Respon_menu_user == "3":
         menu_pesanan_pembeli()
     elif Respon_menu_user == "4":
-        # +Feedback
+        Notif_berhasil(2)
         Menu_User()
     else:
         Menu_untuk_Pembeli(warning="Opsi tidak tersedia!")
@@ -224,7 +239,7 @@ def Menu_untuk_Penjual(warning=""):
     elif Respon_menu_user == "4":
         menu_pesanan_penjual()
     elif Respon_menu_user == "5":
-        # +Feedback
+        Notif_berhasil(2)
         Menu_User()
     else:
         Menu_untuk_Pembeli(

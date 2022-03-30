@@ -222,7 +222,7 @@ class Pembeli:
 
 akun_toko = [
     Toko(
-        nama = "F",
+        nama = "Fort",
         password = "123"
     )
 ]
@@ -235,7 +235,7 @@ akun_pembeli = [
         password="Yapoy"
     ),
     Pembeli(
-        nama="zz",
-        password="zz"
+        nama="iizz",
+        password="iizz"
     )
 ]
