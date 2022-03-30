@@ -19,6 +19,12 @@ def Notif_berhasil(path):
         lightbulbX = (f"                  [---]                   ")
         note = Palette_Warna("LGreen","!Berhasil Log out!","Bold")
         noteX = (f"            {note}            ")
+
+    elif path == 3:
+        lightbulb = Palette_Warna("LRed","•••","Bold")
+        lightbulbX = (f"                  [{lightbulb}]                   ")
+        note = Palette_Warna("LRed","Login Penjual Gagal, Mengeluarkan Paksa","Bold")
+        noteX = (f" {note}  ")
     
 
 
@@ -116,16 +122,17 @@ def Login_Penjual(warning=""):
     global gagal_masuk_toko, akun_now
 
     clear()
-    print("\n\n\n\n\n")
-    print(warning.center(30))
+    print("\n"*5)
+    print(f"\t\t   {warning}")
     print("""
-\t\t    <Konfirmasi Identitas> 
-\t\t    Ketik // untuk membatalkan.\n""")
+\t\t▓    <Konfirmasi Identitas> 
+\t\t▓    Ketik // untuk membatalkan.
+\t\t▓""")
     
     # login
     form = ["Nama", "Password"]
     for i in range(len(form)):
-        print(f"\033[0;92;40m\t\t\t{form[i].ljust(10)}: \033[0;37;40m", end="")
+        print(f"\t\t▓\t\033[0;92;40m{form[i].ljust(10)}: \033[0;37;40m", end="")
         answer = input("")
 
         if answer == "//":
@@ -150,9 +157,10 @@ def Login_Penjual(warning=""):
 
         # pengusiran paksa
         if gagal_masuk_toko == 3:
+            Notif_berhasil(3)
             exit()
 
-        Login_Penjual(f"Gagal login ({gagal_masuk_toko})")
+        Login_Penjual(Palette_Warna("LRed",f"Gagal login ({gagal_masuk_toko}) dari (3)","Bold"))
 
 
 # ===================================== MENU ======================================
@@ -185,7 +193,7 @@ def Menu_User(warning="                                          "):
 def Menu_untuk_Pembeli(warning=""):
     clear()
     print(f""" 
-    
+ 
 
     Berikut Opsi Interaktif Kami, {akun_now.nama}!!
     ||   [1] Lihat daftar seluruh barang
@@ -216,17 +224,17 @@ def Menu_untuk_Pembeli(warning=""):
 def Menu_untuk_Penjual(warning=""):
     clear()
 
-    print(
-        f""" 
+    print(f""" 
     
-    {warning}
-        
+
+
     Berikut Opsi Interaktif Kami, {akun_now.nama}!!
     ||   [1] Lihat daftar seluruh masker 
     ||   [2] Cari masker
     ||   [3] Tambah Masker Jenis Baru
     ||   [4] Daftar pesanan masuk
-    ||   [5] Keluar """
+    ||   [5] Keluar
+    {warning}"""
     )
 
     Respon_menu_user = input("\n\t\t>> ")
@@ -243,9 +251,7 @@ def Menu_untuk_Penjual(warning=""):
         Notif_berhasil(2)
         Menu_User()
     else:
-        Menu_untuk_Pembeli(
-            warning="Opsi tidak tersedia!"
-        )
+        Menu_untuk_Pembeli(Palette_Warna("LRed","Opsi tidak tersedia!", "Bold"))
 
 
 # = = = = = = = = = = = = = = = = = MENU YANG SAMA = = = = = = = = = = = = = = = = = = 
@@ -254,9 +260,8 @@ def Menu_untuk_Penjual(warning=""):
 def menu_sorting(warning=""):
     clear()
 
-    print(f"""
-
-    {warning}
+    print(f""" 
+    
 
     Pilih metode pengurutan barang:
     ||   [1] Berdasarkan Nama
@@ -264,7 +269,8 @@ def menu_sorting(warning=""):
     ||   [3] Berdasarkan Ketersediaan / Stok
     ||   [4] Berdasarkan Harga Terendah
     ||   [5] Berdasarkan Harga Tertinggi
-    ||   [6] Kembali""")
+    ||   [6] Kembali
+    {warning}""")
     kategori = input("\n\t>> ")
 
     # kondisi
@@ -295,7 +301,7 @@ def menu_sorting(warning=""):
             Menu_untuk_Penjual()
     # warning
     else:
-        menu_sorting(warning="Opsi tidak tersedia!")
+        menu_sorting(Palette_Warna("LRed","Opsi tidak tersedia!", "Bold"))
 
     tampilkan_daftar_masker(
         subjudul = f"Sort berdasarkan {indikator}.",
@@ -306,8 +312,9 @@ def menu_sorting(warning=""):
 def menu_searching(menu_back, warning=""):
     clear()
     print(f"\t{warning}")
-    Barang_dituju = input("\n Cari masker: ")
-    print()
+    printc("Grey","\t\t\t _____________________",)
+    Barang_dituju = input("\n\t\t\t▒\033[4;37;40m Cari masker: ")
+    printc("White","","Bold")
 
     # masker yg dicari ada
     if masker_tersedia(Barang_dituju):
@@ -315,7 +322,7 @@ def menu_searching(menu_back, warning=""):
         # tampilkan masker
         masker_ditemukan = masker_dipilih(Barang_dituju)
         tampilkan_daftar_masker(
-            subjudul = f"Hasil pencarian '{Barang_dituju}.'",
+            subjudul = f"Hasil pencarian '{Barang_dituju}':",
             list_masker = masker_ditemukan
         )
 
@@ -330,8 +337,9 @@ def menu_searching(menu_back, warning=""):
 # tampilan daftar masker
 def tampilkan_daftar_masker(subjudul, list_masker, warning=""):
     clear()
-    print("\tDaftar Masker")
-    print("\t=============")
+
+    printc("White","\n\tDaftar Masker", "Bold")
+    print("\t========================")
     print(f"\t{subjudul}\n")
 
     # tampilkan daftar masker
@@ -373,7 +381,7 @@ def menu_pesanan_pembeli():
 
     # jika belum pesan apa-apa
     if len(akun_now.list_pesanan) == 0:
-        print("\tAnda belum membeli barang.")
+        printc("Yellow","\tAnda belum membeli barang.",)
         
         input("\n\n\t\tKembali => ")
         Menu_untuk_Pembeli()
@@ -392,7 +400,7 @@ def transaksi_pesanan(subjudul, list_masker, warning=""):
         \n\t[2] Kembali\
         \n\t{warning}"
     )
-    respon = input("\n\t>> ")
+    respon = input("\t>> ")
 
     # jika pesan masker
     if respon == "1":
@@ -424,13 +432,13 @@ def transaksi_pesanan(subjudul, list_masker, warning=""):
                             tampilkan_daftar_masker(
                                 subjudul,
                                 list_masker,
-                                warning = "Stok tidak mencukupi!"
+                                warning = Palette_Warna("LRed","Stok tidak mencukupi!","Bold")
                             )
                     except ValueError:
                         tampilkan_daftar_masker(
                             subjudul,
                             list_masker,
-                            warning = "Jumlah tidak valid!"
+                            warning = Palette_Warna("LRed","Jumlah tidak valid!","Bold")
                         )
 
                 form[i] = answer
@@ -463,7 +471,7 @@ def transaksi_pesanan(subjudul, list_masker, warning=""):
             tampilkan_daftar_masker(
                 subjudul,
                 list_masker,
-                warning="Masker tidak ditemukan!"
+                warning= Palette_Warna("LRed","Masker tidak ditemukan!","Bold")
             )
 
     # jika tidak pesan masker
@@ -476,7 +484,7 @@ def transaksi_pesanan(subjudul, list_masker, warning=""):
         tampilkan_daftar_masker(
             subjudul,
             list_masker,
-            warning="Opsi tidak tersedia!"
+            warning= Palette_Warna("LRed","Opsi tidak tersedia!","Bold")
         )
 
 
@@ -493,12 +501,12 @@ def menu_tambah_masker(warning=""):
         answer = input(f"\t{form[i].ljust(15)}: ")
 
         if answer == "//":
-            Menu_untuk_Penjual("Aktivitas dibatalkan.")
+            Menu_untuk_Penjual(Palette_Warna("Cyan","Aktivitas dibatalkan.","Bold"))
         elif form[i] in (form[2], form[3]):
             try:
                 answer = int(answer)
             except ValueError:
-                menu_tambah_masker(warning=f"{form[i]} tidak valid!")
+                menu_tambah_masker(warning=Palette_Warna("LRed",f"{form[i]} tidak valid!","Bold"))
         form[i] = answer
         
     akun_now.tambah_masker_baru(
@@ -512,7 +520,7 @@ def menu_tambah_masker(warning=""):
         )
     )
 
-    Menu_untuk_Penjual("Berhasil menambahkan masker!")
+    Menu_untuk_Penjual(Palette_Warna("LGreen","Berhasil menambahkan masker!","Bold"))
     
 
 # daftar pesanan masuk + kirim barang
@@ -544,15 +552,15 @@ def menu_pesanan_penjual(warning=""):
 
             if no_pesanan in list_no_pesanan:
                 index = list_no_pesanan.index(no_pesanan)
-                if akun_now.list_pesanan[index][7] == "sudah dikirim":
-                    menu_pesanan_penjual(warning="Pesanan telah dikirim sebelumnya!")
+                if akun_now.list_pesanan[index][7] == Palette_Warna("Cyan","sudah dikirim","Bold"):
+                    menu_pesanan_penjual(warning=Palette_Warna("LRed","Pesanan telah dikirim sebelumnya!","Bold"))
                 else:
                     akun_now.kirim_masker(
                         no_pesanan = no_pesanan
                     )
-                    print(f"\nPesanan {no_pesanan} telah berhasil dikirim!")
+                    printc("LGreen",f"\nPesanan {no_pesanan} telah berhasil dikirim!",)
             else:
-                menu_pesanan_penjual(warning="Nomor pesanan tidak ditemukan!")
+                menu_pesanan_penjual(warning=Palette_Warna("LRed","Nomor pesanan tidak ditemukan!","Bold"))
 
         input("\n\n\t\tKembali =>")
         Menu_untuk_Penjual()
@@ -593,7 +601,7 @@ def pilih_masker(subjudul, list_masker, warning=""):
             tampilkan_daftar_masker(
                 subjudul,
                 list_masker,
-                warning = "Masker tidak ditemukan."
+                warning = Palette_Warna("LRed","Masker tidak ditemukan.","Bold")
             )
 
     # kembali
@@ -605,7 +613,7 @@ def pilih_masker(subjudul, list_masker, warning=""):
         tampilkan_daftar_masker(
             subjudul, 
             list_masker,
-            warning = "Opsi tidak tersedia!"
+            warning = Palette_Warna("LRed","Opsi tidak tersedia!","Bold")
         )
 
 # menu manipulasi stok masker
@@ -644,13 +652,13 @@ def edit_masker(masker, warning=""):
             else:
                 edit_masker(
                     masker, 
-                    warning="Jumlah tidak valid!"
+                    warning=Palette_Warna("LRed","Jumlah tidak valid!","Bold")
                 )
 
         except ValueError:
             edit_masker(
                 masker, 
-                warning="Jumlah tidak valid!"
+                warning=Palette_Warna("LRed","Jumlah tidak valid!","Bold")
             )
         
     # kurangi stok
@@ -668,13 +676,13 @@ def edit_masker(masker, warning=""):
             else:
                 edit_masker(
                     masker, 
-                    warning = "Jumlah tidak valid!"
+                    warning = Palette_Warna("LRed","Jumlah tidak valid!","Bold")
                 )
             
         except ValueError:
             edit_masker(
                 masker, 
-                warning = "Jumlah tidak valid!"
+                warning = Palette_Warna("LRed","Jumlah tidak valid!","Bold")
             )
     
     # hapus masker
@@ -692,7 +700,7 @@ def edit_masker(masker, warning=""):
     else:
         edit_masker(
             masker, 
-            warning="Opsi tidak tersedia!"
+            warning=Palette_Warna("LRed","Opsi tidak tersedia!","Bold")
         )
 
     Menu_untuk_Penjual()

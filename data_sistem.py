@@ -235,7 +235,7 @@ akun_pembeli = [
         password="Yapoy"
     ),
     Pembeli(
-        nama="iizz",
-        password="iizz"
+        nama="zz",
+        password="zz"
     )
 ]

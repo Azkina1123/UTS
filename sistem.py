@@ -100,7 +100,7 @@ class Toko:
             {masker.harga*jumlah},
             '{pembeli.nama}',
             '{alamat}',
-            'belum dikirim'
+            '{Palette_Warna("Yellow","belum dikirim",)}'
         )'''
 
         cur.execute(tambah_pesanan)
@@ -128,7 +128,7 @@ class Toko:
 
         # update database
         update_status = f"""UPDATE tabel_pesanan_penjual
-                            SET status = 'sudah dikirim'
+                            SET status = '\033[4;95;40msudah dikirim\033[0;37;40m'
                             WHERE nomor_pesanan = '{no_pesanan}'"""
         cur.execute(update_status)
 
@@ -152,7 +152,7 @@ class Toko:
             print(f"({i}). {tanggal} -- {no_pesanan}\
                 \n\t{nama_masker} x {jumlah}\tRp{total}\
                 \n\t{alamat} -- {nama_pembeli}\
-                \n\t\t -- {status}")
+                \n\t\t -- {status}\n")
 
             i += 1
 
@@ -473,7 +473,7 @@ def Palette_Warna(ColourCode="White", text="", fonteu="Reset"):
     FontNumber = FontTuple.index(fonteu)
     return f"\033[{FontNumber};{ColourNumber};40m{text}\033[0m"
 
-def printc(ColourCode, text, fonteu):
+def printc(ColourCode="White", text="", fonteu="Reset"):
     print(Palette_Warna(ColourCode, text, fonteu))
 
 def inputc(ColourCode, text, fonteu):

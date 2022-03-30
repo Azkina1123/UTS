@@ -1,5 +1,5 @@
 from sistem import kode_masker
-# TAMBAH STOK =====================================
+# RESET DATA =====================================
 
 from sistem import *
 nama = [
