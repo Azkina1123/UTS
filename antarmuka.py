@@ -58,6 +58,12 @@ def Notif_berhasil(path):
         lightbulbX = (f"                  [{lightbulb}]                   ")
         note = Palette_Warna("LRed","!Menutup Program!","Bold")
         noteX = (f"            {note}             ")
+
+    elif path == 5:
+        lightbulb = "   "
+        lightbulbX = (f"                   {lightbulb}                    ")
+        note = Palette_Warna("LBlue","!Melakukan Pembelian!","Bold")
+        noteX = (f"           {note}          ")
     
     for i in range (6):
         if i == 0 or i == 3 or i == 6:
@@ -145,9 +151,7 @@ def Login_Pembeli(warning="                                          "):
         
         # kalau mau sign up
         elif Respon_menu_user == "2":
-            print([akun.nama for akun in akun_pembeli])
-            print([akun.password for akun in akun_pembeli])
-            input()
+
             #Verifikasi apakah nama sudah tersedia atau belum
             if nama_sudah_ada(akun_pembeli, nama):
                 Login_Pembeli(Palette_Warna("LRed","              Gagal Sign up!              ","Bold"))
@@ -387,7 +391,7 @@ def menu_searching(menu_back, warning=""):
     else:
 
         #timed cls 1s
-        for i in range(3,0,-1):
+        for i in range(2,0,-1):
             clear()
             print(f"\n\n\n\n\n\n\t{warning}")
             printc("Grey","\t\t\t _____________________",)
@@ -440,20 +444,20 @@ def menu_pesanan_pembeli():
     clear()
 
     # judul halaman
-    print("\n\n\tDaftar Pesanan Anda")
-    print("\t===================\n")
+    print("\n\n\n\n\n\t\t\t\t\tDaftar Pesanan Anda")
+    print("\t\t\t\t\t===================\n")
 
     # jika belum pesan apa-apa
     if len(akun_now.list_pesanan) == 0:
-        printc("Yellow","\tAnda belum membeli barang.",)
+        printc("Yellow","\t\t\tAnda belum membeli barang.",)
         
-        input("\n\n\t\tKembali => ")
+        input("\n\n\t\t\t\tKembali => ")
         Menu_untuk_Pembeli()
     # jika sudah pesan
     else:
         akun_now.tampilkan_pesanan()
         
-        input("\n\n\t\tKembali =>")
+        input("\n\n\t\t\tKembali =>")
         Menu_untuk_Pembeli()
 
 # tanyakan apakah melakukan transaksi
@@ -468,7 +472,7 @@ def transaksi_pesanan(subjudul, list_masker, warning=""):
 
     # jika pesan masker
     if respon == "1":
-        kode_masker = input("\n\tKode masker\t: ")
+        kode_masker = input("\n\t\t\tKode masker\t: ")
 
         # cek kode ada atau tidak
         index_masker = interpolation_search(
@@ -484,7 +488,7 @@ def transaksi_pesanan(subjudul, list_masker, warning=""):
 
             form = ["Jumlah barang", "Alamat Anda"]
             for i in range(len(form)):
-                answer = input(f"\t{form[i].ljust(15)} : ")
+                answer = input(f"\t\t\t{form[i].ljust(15)}\t : ")
 
                 # jumlah yg dimasukkan
                 if i == 0:
@@ -514,20 +518,21 @@ def transaksi_pesanan(subjudul, list_masker, warning=""):
                 form[1]             = alamat barang
                 """
 
-            print(f"\tTotal yang harus dibayar adalah Rp{form[0]*masker.harga}")
-            respon = input("\n\tKetik '1' untuk melanjutkan pembelian\n\t>> ")
+            printc("Yellow",f"\n\t\t\tTotal yang harus dibayar adalah Rp{form[0]*masker.harga}","Bold")
+            respon = input("\033[1;33m\t\t\tKetik '1' untuk melanjutkan pembelian\n\t>>\033[0m ")
         
             if respon == "1":
                 # pesanan diproses
                 akun_now.pesan_masker(akun_toko[0], kode_masker, form[0], form[1])
-                Menu_untuk_Pembeli(warning="Pembelian berhasil!")
+                Notif_berhasil(5)
+                Menu_untuk_Pembeli(warning=Palette_Warna("LGreen","Pembelian berhasil!","Bold"))
 
             else:
                 # pesanan batal
                 tampilkan_daftar_masker(
                     subjudul,
                     list_masker,
-                    warning="Pembelian dibatalkan."
+                    warning=Palette_Warna("LRed","Pembelian dibatalkan.","Bold")
                 )
                 
         # jika tidak ada
@@ -540,7 +545,6 @@ def transaksi_pesanan(subjudul, list_masker, warning=""):
 
     # jika tidak pesan masker
     elif respon == "2":
-        input("\n\t\tKembali => ")
         Menu_untuk_Pembeli()
 
     # jika opsi tidak tersedia

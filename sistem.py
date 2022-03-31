@@ -151,10 +151,12 @@ class Toko:
             else:
                 pass
             
-            print(f"({i}). {tanggal} -- {no_pesanan}\
-                \n\t{nama_masker} x {jumlah}\tRp{total}\
-                \n\t{alamat} -- {nama_pembeli}\
-                \n\t\t -- {status}\n")
+            print(f"\t\t   ({i}). {tanggal} -- [{no_pesanan}]\
+                \n\t\t\tMasker  : {nama_masker} x {jumlah}\
+                \n\t\t\tHarga   : Rp{total}\
+                \n\t\t\tAlamat  : {alamat}\
+                \n\t\t\tPembeli : {nama_pembeli}\
+                \n\t\t\t\t -- {status}\n")
 
             i += 1
 
@@ -202,10 +204,10 @@ class Masker:
     def tampilkan_data(self):
         print(
             f"\t\t\t   [{self.kode.center(30)}]\
-            \n\t\t\tNama\t: {self.nama}\
-            \n\t\t\tWarna\t: {self.warna}\
-            \n\t\t\tHarga\t: Rp{self.harga}\
-            \n\t\t\tStok\t: {self.jumlah}"
+            \n\t\t\t| \033[1mNama\t:\033[0m {self.nama}\
+            \n\t\t\t| \033[1mWarna\t:\033[0m {self.warna} {identify_warna(self.warna)}\
+            \n\t\t\t| \033[1mHarga\t:\033[0m Rp{self.harga}\
+            \n\t\t\t| \033[1mStok\t:\033[0m {self.jumlah}"
         )
 
 class Pembeli:
@@ -236,11 +238,12 @@ class Pembeli:
             alamat = pesanan[6]
             status = pesanan[7]
 
-            print(f"({i}). {tanggal} -- {no_pesanan}\
-                \n\t{nama_masker} x {jumlah}\tRp{total}\
-                \n\tAlamat  : {alamat}\
-                \n\tPembeli : {nama_pembeli}\
-                \n\t\t -- {status}")
+            print(f"\t\t   ({i}). {tanggal} -- [{no_pesanan}]\
+                \n\t\t\tMasker  : {nama_masker} x {jumlah}\
+                \n\t\t\tHarga   : Rp{total}\
+                \n\t\t\tAlamat  : {alamat}\
+                \n\t\t\tPembeli : {nama_pembeli}\
+                \n\t\t\t\t -- {status}\n")
             i += 1
 
     def update_pesanan(self):
@@ -516,6 +519,22 @@ def printc(ColourCode="White", text="", fonteu="Reset"):
 
 def inputc(ColourCode, text, fonteu):
     return input(f"{Palette_Warna(ColourCode, text, fonteu)}")
+
+def identify_warna(warna_text='putih'):
+    warna_text = warna_text.casefold()
+    list_warna_bahasa_Indonesia = ['merah', 'hijau', 'abu-abu', 'putih', 'biru tua', 'biru muda',
+    'biru toska', 'toska', 'merah muda', 'pink']
+    English_Colour_list = ["LRed", "Green", "Grey", "White", "Blue", "LBlue",
+    "Cyan", "LCyan", "Pink", "Pink" ]
+
+    if warna_text == "hitam":
+        return "□"
+    elif warna_text in list_warna_bahasa_Indonesia:
+        indexNum = list_warna_bahasa_Indonesia.index(warna_text)
+        warna_ENG =  English_Colour_list[indexNum]
+        return Palette_Warna(warna_ENG, "■", "Reset")
+    else:
+        return ""
 
 
 
