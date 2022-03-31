@@ -295,17 +295,6 @@ def password_benar(tipe_akun, nama, password):
                 return True
     else: return False
 
-# return Boolean
-# def masker_tersedia(nama):
-#     index = interpolation_search(
-#         list_data=[akun_toko[0].list_masker],
-#         data = nama
-#     )
-
-#     if index is not None:
-#         return True
-#     else:
-#         return False
 
 # return Masker
 def masker_tersedia(nama):
@@ -346,34 +335,68 @@ def jumlah_masuk_akal(jumlah):
 
 # sort n search ...........................................................
 # return int atau None
+
+print(ord("1")+ord("5")<ord("2")+ord("9"))
+
+def list_ASCII(list_data):
+    list_ascii = []
+    for elemen in list_data:
+        elemen = str(elemen)
+        total = 0
+        for char in elemen:
+            total += ord(char)
+        list_ascii.append(total)
+
+    return list_ascii
+
+def str_to_ASCII(string):
+    list_ascii = [ord(char) for char in string]
+    return list_ascii
+
+def ASCII_to_str(list_ascii):
+    string = ""
+    for ascii in list_ascii:
+        char = chr(ascii)
+        string += char
+    return string
+    
 def interpolation_search(list_data, data):
     
-    insertion_sort(list_data)
+    list_elemen = list_data
+
+    list_ascii = list_ASCII(list_data)
+    list_ascii_data = str_to_ASCII(data)
+    data_ascii = sum(list_ascii_data)
+
+    insertion_sort(list_ascii)
 
     index = -1
-    min = 0
-    max = len(list_data)-1
+    low = 0
+    high = len(list_ascii)-1
 
-    while list_data[min] < data and list_data[max] > data:
-        mid = (data - list_data[min]) // (list_data[max] - list_data[min]) * (max - min) + min
+    while list_ascii[low] < data_ascii \
+        and list_ascii[high] > data_ascii:
 
-        if list_data[mid] < data:
-            min = mid + 1
-        elif list_data[mid] > data:
-            max = mid - 1
+        mid = (data_ascii - list_ascii[low]) // (list_ascii[high] - list_ascii[low]) * (high - low) + low
+
+        if list_ascii[mid] < data_ascii:
+            low = mid + 1
+        elif list_ascii[mid] > data_ascii:
+            high = mid - 1
         else:
             index = mid
             break
 
-    if list_data[min] == data:
-        index = min
-    elif list_data[max] == data:
-        index = max
+    if list_ascii[low] == data_ascii:
+        index = low
+    elif list_ascii[high] == data_ascii:
+        index = high
 
     if index == -1:
         print("\nData tidak ditemukan.")
     else:
-        index = list_data.index(list_data[index])
+        elemen = ASCII_to_str(list_ascii_data)
+        index = list_elemen.index(elemen)
         return index
 
 def insertion_sort(list_data):
