@@ -449,9 +449,9 @@ def menu_pesanan_pembeli():
 
     # jika belum pesan apa-apa
     if len(akun_now.list_pesanan) == 0:
-        printc("Yellow","\t\t\tAnda belum membeli barang.",)
+        printc("Yellow","\t\t\t\t\tAnda belum membeli barang.",)
         
-        input("\n\n\t\t\t\tKembali => ")
+        input("\n\n\t\t\t\t\t\tKembali => ")
         Menu_untuk_Pembeli()
     # jika sudah pesan
     else:
