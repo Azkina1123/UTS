@@ -97,7 +97,7 @@ class Toko:
             {masker.harga*jumlah},
             '{pembeli.nama}',
             '{alamat}',
-            '{Palette_Warna("Yellow","belum dikirim",)}'
+            '{"belum dikirim"}'
         )'''
 
         cur.execute(tambah_pesanan)
@@ -125,7 +125,7 @@ class Toko:
 
         # update database
         update_status = f"""UPDATE tabel_pesanan_penjual
-                            SET status = '\033[4;95;40msudah dikirim\033[0;37;40m'
+                            SET status = 'sudah dikirim'
                             WHERE nomor_pesanan = '{no_pesanan}'"""
         cur.execute(update_status)
 
@@ -149,7 +149,7 @@ class Toko:
             if status == "belum dikirim":
                 status = Palette_Warna("Yellow", "belum dikirim")
             else:
-                pass
+                status = "\033[4;95;40m" + status + "\033[0m"
             
             print(f"\t\t   ({i}). {tanggal} -- [{no_pesanan}]\
                 \n\t\t\tMasker  : {nama_masker} x {jumlah}\
@@ -238,6 +238,11 @@ class Pembeli:
             alamat = pesanan[6]
             status = pesanan[7]
 
+            if status == "belum dikirim":
+                status = Palette_Warna("Yellow", "belum dikirim")
+            else:
+                status = "\033[4;95;40m" + status + "\033[0m"
+
             print(f"\t\t   ({i}). {tanggal} -- [{no_pesanan}]\
                 \n\t\t\tMasker  : {nama_masker} x {jumlah}\
                 \n\t\t\tHarga   : Rp{total}\
@@ -300,30 +305,25 @@ def password_benar(tipe_akun, nama, password):
 
 
 # return Masker
-def masker_tersedia(nama):
-    # cari nama yg berkaitan dgn yg dicari
+def masker_tersedia(input):
     list_nama = [
-        masker.nama for masker in akun_toko[0].list_masker\
-            if nama.casefold() in masker.nama.casefold()
+        masker.nama.casefold() \
+        for masker in akun_toko[0].list_masker
     ]
     list_warna = [
-        masker.warna for masker in akun_toko[0].list_masker\
-            if nama.casefold() == masker.warna.casefold()
+        masker.warna.casefold() \
+        for masker in akun_toko[0].list_masker
     ]
+    for nama_masker in list_nama:
+        if input in nama_masker or input in list_warna:
+            return True
+    else: return False
 
-    # gabung
-    list_nama.extend(list_warna)
-    
-    # cari masker2 yg ditemukan
+def masker_dipilih(input):
     masker_ditemukan = []
-    for input in list_nama:
-        index = interpolation_search(
-            list_data = list_nama, 
-            data = input
-        )
-        
-        masker_ditemukan.append(akun_toko[0].list_masker[index])
-
+    for masker in akun_toko[0].list_masker:
+        if input in masker.nama or input == masker.harga:
+            masker_ditemukan.append(masker)
     return masker_ditemukan
 
 # return Boolean
@@ -338,9 +338,6 @@ def jumlah_masuk_akal(jumlah):
 
 # sort n search ...........................................................
 # return int atau None
-
-print(ord("1")+ord("5")<ord("2")+ord("9"))
-
 def list_ASCII(list_data):
     list_ascii = []
     for elemen in list_data:
@@ -364,14 +361,13 @@ def ASCII_to_str(list_ascii):
     return string
     
 def interpolation_search(list_data, data):
-    
-    list_elemen = list_data
+    list_elemen = list_data.copy()
 
-    list_ascii = list_ASCII(list_data)
+    insertion_sort(list_elemen)
+
+    list_ascii = list_ASCII(list_elemen)
     list_ascii_data = str_to_ASCII(data)
     data_ascii = sum(list_ascii_data)
-
-    insertion_sort(list_ascii)
 
     index = -1
     low = 0
@@ -396,14 +392,13 @@ def interpolation_search(list_data, data):
         index = high
 
     if index == -1:
-        print("\nData tidak ditemukan.")
+        return None
     else:
         elemen = ASCII_to_str(list_ascii_data)
-        index = list_elemen.index(elemen)
+        index = list_data.index(elemen)
         return index
 
 def insertion_sort(list_data):
-
     list_copy = list_data.copy()
     for i in range(1, len(list_copy)):
  
@@ -414,6 +409,9 @@ def insertion_sort(list_data):
                 list_data[j+1] = list_data[j]
                 j -= 1
         list_data[j+1] = key
+
+# a = ["uenak", "jago", "ayam"]
+# print(interpolation_search(a, "ayam"))
 
 def sort_berdasarkan(kategori):
     if kategori == "harga":
