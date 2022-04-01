@@ -25,7 +25,9 @@ class Toko:
 
     # method = fungsi yg cuma bisa dipake objek Toko ----------------------
     def tambah_masker_baru(self, nama_masker, warna, harga, jumlah, kode):
-        self.list_masker.append(Masker(nama_masker, warna, harga, jumlah, kode))
+        self.list_masker.append(
+            Masker(nama_masker, warna, harga, jumlah, kode)
+        )
         
         con = sqlite3.connect("database.db")
         cur = con.cursor()
@@ -314,15 +316,18 @@ def masker_tersedia(input):
         masker.warna.casefold() \
         for masker in akun_toko[0].list_masker
     ]
+
     for nama_masker in list_nama:
-        if input in nama_masker or input in list_warna:
+        if input.casefold() in nama_masker \
+        or input.casefold() in list_warna:
             return True
     else: return False
 
 def masker_dipilih(input):
     masker_ditemukan = []
     for masker in akun_toko[0].list_masker:
-        if input in masker.nama or input == masker.harga:
+        if input.casefold() in masker.nama.casefold() \
+            or input.casefold() == masker.warna.casefold():
             masker_ditemukan.append(masker)
     return masker_ditemukan
 
@@ -363,9 +368,9 @@ def ASCII_to_str(list_ascii):
 def interpolation_search(list_data, data):
     list_elemen = list_data.copy()
 
-    insertion_sort(list_elemen)
 
     list_ascii = list_ASCII(list_elemen)
+    insertion_sort(list_ascii)
     list_ascii_data = str_to_ASCII(data)
     data_ascii = sum(list_ascii_data)
 
@@ -409,9 +414,6 @@ def insertion_sort(list_data):
                 list_data[j+1] = list_data[j]
                 j -= 1
         list_data[j+1] = key
-
-# a = ["uenak", "jago", "ayam"]
-# print(interpolation_search(a, "ayam"))
 
 def sort_berdasarkan(kategori):
     if kategori == "harga":
