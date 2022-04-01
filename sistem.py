@@ -371,8 +371,11 @@ def interpolation_search(list_data, data):
 
     list_ascii = list_ASCII(list_elemen)
     insertion_sort(list_ascii)
+    print("list_ascii = ", list_ascii)
     list_ascii_data = str_to_ASCII(data)
+    print("list_ascii_data =", list_ascii_data)
     data_ascii = sum(list_ascii_data)
+    print("data_ascii =", data_ascii)
 
     index = -1
     low = 0
@@ -400,6 +403,7 @@ def interpolation_search(list_data, data):
         return None
     else:
         elemen = ASCII_to_str(list_ascii_data)
+        print(elemen)
         index = list_data.index(elemen)
         return index
 
@@ -414,6 +418,7 @@ def insertion_sort(list_data):
                 list_data[j+1] = list_data[j]
                 j -= 1
         list_data[j+1] = key
+
 
 def sort_berdasarkan(kategori):
     if kategori == "harga":
