@@ -78,5 +78,8 @@ def insertion_sort(list_data):
 a = ["ms1P", "ms4B", "ms5A", "ms10P", "ms12N"]
 ascii_a = list_ASCII(a)
 
+insertion_sort(a)
+print(a)
+
 index = interpolation_search(a, "ms12N")
 print(index)
