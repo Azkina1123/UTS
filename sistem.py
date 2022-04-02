@@ -507,9 +507,21 @@ def kode_masker(num, warna):
 
 # decorating material ......................................................
 def Palette_Warna(ColourCode="White", text="", fonteu="Reset"):
-    ColourTupleA = ("Black","Red","Green","Orange","Blue","Purple","Cyan","White")
-    ColourTupleB = ("Grey","LRed","LGreen","Yellow","LBlue","Pink","LCyan")
-    FontTuple = ("Reset","Bold","Disable",0,"Underline",0,0,"Reverse","Invisible","Strikethrough")
+    ColourTupleA = (
+        "Black","Red","Green",
+        "Orange","Blue","Purple",
+        "Cyan","White"
+        )
+    ColourTupleB = (
+        "Grey","LRed","LGreen",
+        "Yellow","LBlue","Pink",
+        "LCyan"
+        )
+    FontTuple = (
+        "Reset","Bold","Disable",
+        0,"Underline",0,0,
+        "Reverse","Invisible","Strikethrough"
+        )
 
     if ColourCode in ColourTupleA:
         ColourNumber = 30 + ColourTupleA.index(ColourCode)
@@ -526,10 +538,18 @@ def inputc(ColourCode, text, fonteu):
 
 def identify_warna(warna_text='putih'):
     warna_text = warna_text.casefold()
-    list_warna_bahasa_Indonesia = ['merah', 'hijau', 'abu-abu', 'putih', 'navy', 'biru',
-     'toska', 'pink']
-    English_Colour_list = ["LRed", "Green", "Grey", "White", "Blue", "LBlue",
-     "LCyan", "Pink" ]
+    list_warna_bahasa_Indonesia =[
+    'merah', 'hijau', 'abu-abu',
+    'putih', 'navy', 'biru',
+    'toska', 'pink', 'kuning',
+    'oranye', 'orange', 'jingga'
+    ]
+    English_Colour_list = [
+    "LRed", "Green", "Grey",
+    "White", "Blue", "LBlue",
+    "LCyan", "Pink", "Yellow",
+    "Orange", "Orange", "Orange"
+    ]
 
     if warna_text == "hitam":
         return "□"
