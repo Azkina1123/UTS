@@ -97,11 +97,21 @@ def Notif_berhasil(path):
         lightbulb = "   "
         lightbulbX = (f"                   {lightbulb}                    ")
         note = Palette_Warna(
-            "LBlue",
+            "LCyan",
             "!Melakukan Pembelian!",
             "Bold"
         )
         noteX = (f"           {note}          ")
+
+    elif path == 6:
+        lightbulb = "   "
+        lightbulbX = (f"                   {lightbulb}                    ")
+        note = Palette_Warna(
+            "LCyan",
+            "!Mengedit Masker!",
+            "Bold"
+        )
+        noteX = (f"             {note}            ")
     
     for i in range (6):
         if i == 0 or i == 3 or i == 6:
@@ -339,7 +349,6 @@ def Menu_untuk_Penjual(warning=""):
     print(f"""\n\n\n\n 
     
 
-
 \t\t    Berikut Opsi Interaktif Kami, {nama_akun}!!
 \t\t    ||   [0] Keluar
 \t\t    ||   [1] Lihat daftar seluruh masker
@@ -363,7 +372,7 @@ def Menu_untuk_Penjual(warning=""):
     elif Respon_menu_user == "4":
         menu_pesanan_penjual()
     else:
-        Menu_untuk_Pembeli(
+        Menu_untuk_Penjual(
             Palette_Warna(
                 "LRed",
                 "Opsi tidak tersedia!", 
@@ -467,11 +476,13 @@ def menu_searching(menu_back, warning=""):
             print(f"\n\t\t\t▒\033[4;37m Cari masker: {Barang_dituju}")
             printc("White","","Bold")
 
-            print(
-                f"\n\n\t\t\tBarang tidak ditemukan\
-                    \n\t\t\t          atau\
-                    \n\t\t\tsedang tidak tersedia ({i}s)"
-            )
+            printc("Grey","\n\n\t\t\t▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒","Bold")
+            print(          
+                f"\n\n\t\t\t|   Barang tidak ditemukan    |\
+                    \n\t\t\t|          atau               |\
+                    \n\t\t\t| sedang tidak tersedia ({i}s)  |")
+            printc("Grey","\n\n\t\t\t▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒","Bold")
+
             tclear(1)
         menu_back(Palette_Warna("LRed", "Masker tidak ditemukan!", "Bold"))
 
@@ -903,7 +914,12 @@ def edit_masker(masker, warning=""):
                 )
             )
         
-        Menu_untuk_Penjual(warning="Stok masker berhasil ditambahkan!")
+        Notif_berhasil(6)
+        Menu_untuk_Penjual(
+            warning = Palette_Warna(
+            "LGreen",
+            "Stok masker berhasil ditambahkan!",
+            "Bold"))
     # kurangi stok
     elif Respon_menu_user == "2":
         try:
@@ -936,7 +952,12 @@ def edit_masker(masker, warning=""):
                 )
             )
         
-        Menu_untuk_Penjual(warning="Stok masker berhasil dikurangi!")
+        Notif_berhasil(6)
+        Menu_untuk_Penjual(
+            warning = Palette_Warna(
+            "LGreen",
+            "Stok masker berhasil dikurangi!",
+            "Bold"))
     
     # hapus masker
     elif Respon_menu_user == "3":
@@ -945,9 +966,10 @@ def edit_masker(masker, warning=""):
             if mask == masker:
                 akun_now.hapus_masker(masker.kode)
 
+        Notif_berhasil(6)
         Menu_untuk_Penjual(
             warning = Palette_Warna(
-                "Green",
+                "LGreen",
                 "Masker berhasil dihapus.",
                 "Bold"
             )
