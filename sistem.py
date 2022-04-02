@@ -415,7 +415,7 @@ def sort_berdasarkan(kategori):
         list_harga = [masker.harga for masker in akun_toko[0].list_masker]
         insertion_sort(list_harga)
 
-        list_masker = sort_berdasarkan("nama")
+        list_masker = akun_toko[0].list_masker
 
         for i in range(len(list_harga)):
             for masker in list_masker:
@@ -443,21 +443,21 @@ def sort_berdasarkan(kategori):
         list_warna = [masker.warna for masker in akun_toko[0].list_masker]        
         insertion_sort(list_warna)
 
-        list_masker = sort_berdasarkan("nama")
+        list_masker = akun_toko[0].list_masker
 
         for i in range(len(list_warna)):
             for masker in list_masker:
                 if list_warna[i] == masker.warna:
                     list_warna[i] = masker
                     list_masker.remove(masker)
-        
+
         return list_warna
     
     elif kategori == "stok":
         list_stok = [masker.jumlah for masker in akun_toko[0].list_masker]
         insertion_sort(list_stok)
 
-        list_masker = sort_berdasarkan("nama")
+        list_masker = akun_toko[0].list_masker
 
         for i in range(len(list_stok)):
             for masker in list_masker:
@@ -625,7 +625,3 @@ def sinkronisasi_data():
     update_toko()
     update_pembeli()
 
-
-# sinkronisasi_data()
-# print(len(akun_toko[0].list_masker))
-# print(len(sort_berdasarkan("harga")))

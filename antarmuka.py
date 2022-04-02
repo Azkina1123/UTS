@@ -496,6 +496,7 @@ def tampilkan_daftar_masker(subjudul, list_masker, warning=""):
 
     # tampilkan daftar masker
     print(("\t\t" + "█"*50))
+
     i = 1
     for masker in list_masker:
         print("\t"*4+f"     ---- {i} ----")
