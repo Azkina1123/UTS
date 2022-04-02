@@ -616,14 +616,11 @@ def transaksi_pesanan(subjudul, list_masker, warning=""):
 
             printc(
                 "Yellow",
-                f"\n\t\t\tTotal yang harus dibayar adalah \
-                    Rp{form[0]*masker.harga}",
+                f"\n\t\t\tTotal yang harus dibayar adalah Rp{form[0]*masker.harga}",
                 "Bold"
             )
             respon = input(
-                "\033[1;33m\
-                \t\t\tKetik '1' untuk melanjutkan pembelian\n\t\t\t\t\t>>\
-                \033[0m "
+                "\033[1;33m\t\t\tKetik '1' untuk melanjutkan pembelian\n\t\t\t\t\t>>\033[0m "
             )
         
             if respon == "1":

@@ -87,9 +87,6 @@ class Toko:
         con = sqlite3.connect("database.db")
         cur = con.cursor()
 
-        # persediaan masker dikurangi
-        masker.kurangi_stok(jumlah)
-
         # tanggal, no_pesanan, nama_masker, jumlah, total, nama_pembeli, alamat
         tambah_pesanan = f'''INSERT INTO tabel_pesanan_penjual VALUES (
             '{hari_ini()}',
@@ -105,6 +102,13 @@ class Toko:
         cur.execute(tambah_pesanan)
         con.commit()
         con.close()
+
+        # persediaan masker dikurangi
+        self.restok_masker(
+            "kurang", 
+            masker.kode,
+            jumlah
+        )
 
         update_toko()
 
@@ -522,10 +526,10 @@ def inputc(ColourCode, text, fonteu):
 
 def identify_warna(warna_text='putih'):
     warna_text = warna_text.casefold()
-    list_warna_bahasa_Indonesia = ['merah', 'hijau', 'abu-abu', 'putih', 'biru tua', 'biru muda',
-    'biru toska', 'toska', 'merah muda', 'pink']
+    list_warna_bahasa_Indonesia = ['merah', 'hijau', 'abu-abu', 'putih', 'navy', 'biru',
+     'toska', 'pink']
     English_Colour_list = ["LRed", "Green", "Grey", "White", "Blue", "LBlue",
-    "Cyan", "LCyan", "Pink", "Pink" ]
+     "LCyan", "Pink" ]
 
     if warna_text == "hitam":
         return "□"
