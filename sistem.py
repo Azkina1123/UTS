@@ -271,16 +271,7 @@ akun_toko = [
     )
 ]
 
-akun_pembeli = [
-    Pembeli(
-        nama="Yapoy",
-        password="Yapoy"
-    ),
-    Pembeli(
-        nama="zz",
-        password="zz"
-    )
-]
+akun_pembeli = []
 
 # =========================================================
 #                          FUNGSI
@@ -422,7 +413,6 @@ def insertion_sort(list_data):
 def sort_berdasarkan(kategori):
     if kategori == "harga":
         list_harga = [masker.harga for masker in akun_toko[0].list_masker]
-        print(list_harga)
         insertion_sort(list_harga)
 
         list_masker = sort_berdasarkan("nama")
@@ -432,6 +422,7 @@ def sort_berdasarkan(kategori):
                 if list_harga[i] == masker.harga:
                     list_harga[i] = masker
                     list_masker.remove(masker)
+
         
         return list_harga
 
@@ -449,8 +440,7 @@ def sort_berdasarkan(kategori):
         return list_nama
 
     elif kategori == "warna":
-        list_warna = [masker.warna for masker in akun_toko[0].list_masker]
-        print(list_warna)
+        list_warna = [masker.warna for masker in akun_toko[0].list_masker]        
         insertion_sort(list_warna)
 
         list_masker = sort_berdasarkan("nama")
@@ -465,7 +455,6 @@ def sort_berdasarkan(kategori):
     
     elif kategori == "stok":
         list_stok = [masker.jumlah for masker in akun_toko[0].list_masker]
-        print(list_stok)
         insertion_sort(list_stok)
 
         list_masker = sort_berdasarkan("nama")
@@ -475,7 +464,7 @@ def sort_berdasarkan(kategori):
                 if list_stok[i] == masker.jumlah:
                     list_stok[i] = masker
                     list_masker.remove(masker)
-        
+
         return list_stok
 
 # pesanan ..................................................................
@@ -537,7 +526,7 @@ def inputc(ColourCode, text, fonteu):
     return input(f"{Palette_Warna(ColourCode, text, fonteu)}")
 
 def identify_warna(warna_text='putih'):
-    warna_text = warna_text.casefold()
+    warna = warna_text.casefold()
     list_warna_bahasa_Indonesia =[
     'merah', 'hijau', 'abu-abu',
     'putih', 'navy', 'biru',
@@ -551,10 +540,10 @@ def identify_warna(warna_text='putih'):
     "Orange", "Orange", "Orange"
     ]
 
-    if warna_text == "hitam":
+    if warna == "hitam":
         return "□"
-    elif warna_text in list_warna_bahasa_Indonesia:
-        indexNum = list_warna_bahasa_Indonesia.index(warna_text)
+    elif warna in list_warna_bahasa_Indonesia:
+        indexNum = list_warna_bahasa_Indonesia.index(warna)
         warna_ENG =  English_Colour_list[indexNum]
         return Palette_Warna(warna_ENG, "■", "Reset")
     else:
@@ -637,5 +626,6 @@ def sinkronisasi_data():
     update_pembeli()
 
 
-# akun_pembali_baru("bebek","uenak")
-# print(akun_pembeli, f"\n\n\t{len(akun_pembeli)}")
+# sinkronisasi_data()
+# print(len(akun_toko[0].list_masker))
+# print(len(sort_berdasarkan("harga")))
