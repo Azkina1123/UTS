@@ -1,4 +1,6 @@
 # return int atau None
+
+
 def list_ASCII(list_data):
     list_ascii = []
     for elemen in list_data:
@@ -27,11 +29,8 @@ def interpolation_search(list_data, data):
 
     list_ascii = list_ASCII(list_elemen)
     insertion_sort(list_ascii)
-    print("list_ascii = ", list_ascii)
     list_ascii_data = str_to_ASCII(data)
-    print("list_ascii_data =", list_ascii_data)
     data_ascii = sum(list_ascii_data)
-    print("data_ascii =", data_ascii)
 
     index = -1
     low = 0
@@ -40,14 +39,17 @@ def interpolation_search(list_data, data):
     while list_ascii[low] < data_ascii \
         and list_ascii[high] > data_ascii:
 
-        mid = (data_ascii - list_ascii[low]) // (list_ascii[high] - list_ascii[low]) * (high - low) + low
-
-        if list_ascii[mid] < data_ascii:
-            low = mid + 1
-        elif list_ascii[mid] > data_ascii:
-            high = mid - 1
+        pos = (data_ascii - list_ascii[low]) // (list_ascii[high] - list_ascii[low]) * (high - low) + low
+        print(f"\nlow = {low} | high = {high}\
+              \nlist[low]  = {list_ascii[low]}\
+              \nlist[high] = {list_ascii[high]}\
+              \npos        = {pos}\n")
+        if list_ascii[pos] < data_ascii:
+            low = pos + 1
+        elif list_ascii[pos] > data_ascii:
+            high = pos - 1
         else:
-            index = mid
+            index = pos
             break
 
     if list_ascii[low] == data_ascii:
@@ -59,7 +61,6 @@ def interpolation_search(list_data, data):
         return None
     else:
         elemen = ASCII_to_str(list_ascii_data)
-        print(elemen)
         index = list_data.index(elemen)
         return index
 
@@ -75,11 +76,21 @@ def insertion_sort(list_data):
                 j -= 1
         list_data[j+1] = key
 
-a = ["ms1P", "ms4B", "ms5A", "ms10P", "ms12N"]
+a = ["ms1P", "ms12B", "ms3A", "ms44P", "ms5N"]
+print("a = ", a)
+b = [str_to_ASCII(str) for str in a]
+print("b =", b)
 ascii_a = list_ASCII(a)
+print("ascii_total = ", ascii_a)
+insertion_sort(ascii_a)
+print("sort = ", ascii_a)
 
-insertion_sort(a)
-print(a)
-
-index = interpolation_search(a, "ms12N")
+index = interpolation_search(a, "ms5N")
 print(index)
+
+print("\npos = ", (355-353)*(4-1)/(408-353) + 1)
+
+# a = ["227-", "abx", "-=0"]
+# index = interpolation_search(a, "22(<")
+# print("indexxxx = ", index)
+

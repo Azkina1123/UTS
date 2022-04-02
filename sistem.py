@@ -368,14 +368,10 @@ def ASCII_to_str(list_ascii):
 def interpolation_search(list_data, data):
     list_elemen = list_data.copy()
 
-
     list_ascii = list_ASCII(list_elemen)
     insertion_sort(list_ascii)
-    print("list_ascii = ", list_ascii)
     list_ascii_data = str_to_ASCII(data)
-    print("list_ascii_data =", list_ascii_data)
     data_ascii = sum(list_ascii_data)
-    print("data_ascii =", data_ascii)
 
     index = -1
     low = 0
@@ -384,14 +380,14 @@ def interpolation_search(list_data, data):
     while list_ascii[low] < data_ascii \
         and list_ascii[high] > data_ascii:
 
-        mid = (data_ascii - list_ascii[low]) // (list_ascii[high] - list_ascii[low]) * (high - low) + low
+        pos = (data_ascii - list_ascii[low]) // (list_ascii[high] - list_ascii[low]) * (high - low) + low
 
-        if list_ascii[mid] < data_ascii:
-            low = mid + 1
-        elif list_ascii[mid] > data_ascii:
-            high = mid - 1
+        if list_ascii[pos] < data_ascii:
+            low = pos + 1
+        elif list_ascii[pos] > data_ascii:
+            high = pos - 1
         else:
-            index = mid
+            index = pos
             break
 
     if list_ascii[low] == data_ascii:
@@ -403,7 +399,6 @@ def interpolation_search(list_data, data):
         return None
     else:
         elemen = ASCII_to_str(list_ascii_data)
-        print(elemen)
         index = list_data.index(elemen)
         return index
 
