@@ -37,3 +37,14 @@ yafi.pesan_masker(toko_ayam, "Masker Hijau", 30)
 print("\nCek persediaan...")
 print("Stok Toko Ayam : ")
 toko_ayam.stok_toko()
+
+
+        # list_return = []
+        # while len(list_return) != len(list_harga):
+        #     for i in range(len(list_harga)):
+        #         for masker in list_masker:
+        #             if list_harga[i] == masker.harga:
+        #                 list_return.append(masker)
+        #                 list_masker.remove(masker)
+
+        # return list_return
