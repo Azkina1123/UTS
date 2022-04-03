@@ -1,6 +1,6 @@
 # RESET DATA =====================================
 
-from sistem import *
+from KELOMPOK_FORTRAN import *
 
 akun_pembeli_baru(
     nama = "Aziizah",
